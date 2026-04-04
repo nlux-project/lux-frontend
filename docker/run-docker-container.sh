@@ -1,8 +1,8 @@
 #!/bin/bash
 
 PORT=${PORT:-8080}
-IMAGE=${DOCKER_IMAGE:-lux-frontend}
-CONTAINER=${DOCKER_CONTAINER_NAME:-lux-frontend}
+IMAGE=${DOCKER_IMAGE:-nlux-frontend}
+CONTAINER=${DOCKER_CONTAINER_NAME:-nlux-frontend}
 HOST_CONFIG_JSON=$(pwd)/docker/config.json
 
 # By setting USE_LOCAL_CONFIG_JSON to yes, container will use local config.json
@@ -24,7 +24,8 @@ if [ "${inactive_id}" != '' ]; then
 fi
 
 function run_i {
-  docker run --platform=linux/amd64 -it --name $CONTAINER \
+  #docker run --platform=linux/amd64 -it --name $CONTAINER \
+  docker run -it --name $CONTAINER \
     -p ${PORT}:8080 \
     ${ENVS} \
     ${VOLUMES} \
@@ -32,7 +33,8 @@ function run_i {
 }
 
 function run {
-  docker run --platform=linux/amd64 -d --name $CONTAINER \
+  #docker run --platform=linux/amd64 -d --name $CONTAINER \
+  docker run -d --name $CONTAINER \
   -p ${PORT}:8080 \
   ${ENVS} \
   ${VOLUMES} \
