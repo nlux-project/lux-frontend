@@ -14,6 +14,7 @@ RUN apt-get update && \
     cd /src/client/ && \
     yarn install && \
     npx browserslist@latest --update-db && \
+    cp index.html.template index.html && \
     yarn build && \
     cd /src/server/ && \
     yarn install && \
