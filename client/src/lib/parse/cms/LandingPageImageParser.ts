@@ -24,10 +24,11 @@ export class LandingPageImageParser {
   items: ILandingPageImage[]
 
   constructor(items: ILandingPageImage[]) {
-    this.items = items
+    this.items = items ?? []
   }
 
-  getHeroImage(unit: UnitCode): IImageData {
+  getHeroImage(unit: UnitCode): IImageData | null {
+    if (!this.items?.length) return null
     let images = this.items.filter(
       (item) =>
         unitCodeFromNumString(item.attributes.field_chit_unit[0]) === unit,

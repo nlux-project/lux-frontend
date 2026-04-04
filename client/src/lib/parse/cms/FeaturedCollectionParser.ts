@@ -75,10 +75,11 @@ export class FeaturedCollectionParser {
   data: ICmsData[]
 
   constructor(json: ICmsResponse) {
-    this.data = json.data
+    this.data = json?.data ?? []
   }
 
   getCollections(units: UnitCode[]): ICollection[] {
+    if (!this.data?.length) return []
     const colls: ICollection[] = []
     let candidates = this.data
 
