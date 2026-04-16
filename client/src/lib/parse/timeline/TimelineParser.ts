@@ -229,9 +229,9 @@ export default class TimelineParser {
       const { value, totalItems, searchTag, id } = tData as ITransformedData
       const date = String(value)
       const individualDate = dateCounts[date]
-      if (dateCounts.hasOwnProperty(date)) {
+      if (Object.prototype.hasOwnProperty.call(dateCounts, date)) {
         individualDate.total += totalItems
-        if (!individualDate.hasOwnProperty(searchTag)) {
+        if (!Object.prototype.hasOwnProperty.call(individualDate, searchTag)) {
           individualDate[searchTag] = {
             totalItems,
             searchParams: id,
