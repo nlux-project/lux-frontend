@@ -28,11 +28,16 @@ export class LandingPageImageParser {
   }
 
   getHeroImage(unit: UnitCode): IImageData | null {
-    if (!this.items?.length) return null
-    let images = this.items.filter(
-      (item) =>
-        unitCodeFromNumString(item.attributes.field_chit_unit[0]) === unit,
-    )
+    const items = Array.isArray(this.items) ? this.items : []
+    if (items.length === 0) return null
+
+    let images = items.filter((item) => {
+      try {
+        return unitCodeFromNumString(item.attributes.field_chit_unit[0]) === unit
+      } catch (e) {
+        return false
+      }
+    })
 
     // In case there's no images available for the requested unit,
     // just pick any.
