@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { AuthProvider } from 'react-oidc-context'
 
 import config from './config/config'
+import './i18n'
 import Routes from './features/common/LuxRoutes'
 import GlobalStyle from './styles/global'
 import { useGetEnvQuery } from './redux/api/configApi'
@@ -90,7 +91,9 @@ const App: React.FC = () => {
 
   useEffect(() => {
     if (initialized && !config.env.luxEnv.includes('production')) {
-      embedBugherdScript()
+      if (config.env.bugherdApiKey && config.env.bugherdApiKey.length > 0) {
+        embedBugherdScript()
+      }
     }
   }, [initialized])
 
@@ -132,6 +135,24 @@ const App: React.FC = () => {
   }
 
   if (initialized) {
+    // Apply optional NLUX branding from env/server config
+    try {
+      const root = document.documentElement
+      if (config.env.nluxPrimaryColor) {
+        root.style.setProperty('--nlux-primary', config.env.nluxPrimaryColor)
+      }
+      if (config.env.nluxSecondaryColor) {
+        root.style.setProperty('--nlux-secondary', config.env.nluxSecondaryColor)
+      }
+      if (config.env.nluxFontColor) {
+        root.style.setProperty('--nlux-font', config.env.nluxFontColor)
+      }
+      if (config.env.nluxLogo) {
+        // allow components to use config.env.nluxLogo
+      }
+    } catch (e) {
+      // ignore
+    }
     return (
       <AuthProvider
         authority={config.env.oidcAuthority}

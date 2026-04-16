@@ -1,7 +1,6 @@
-import path from 'path'
-
 import cors from 'cors'
 import express from 'express'
+import path from 'path'
 
 import * as env from '../config/env'
 import * as log from '../lib/log'
@@ -29,35 +28,48 @@ class App {
   }
 
   run(): void {
-    const { port } = this
-    const exp = express()
+    const {port} = this const exp = express()
     exp.use(cors())
+    // Development-only Content Security Policy to allow eval during dev builds
+    // (some dev bundles use eval for source-maps / hot-reload). Do NOT enable
+    // this in production.
+    exp.use(
+        (req: express.Request, res: express.Response,
+         next: express.NextFunction) => {
+          if (env.luxEnv && env.luxEnv !== 'production') {
+            res.setHeader(
+                'Content-Security-Policy',
+                'default-src \'self\' \'unsafe-eval\' \'unsafe-inline\' data: https:; img-src \'self\' data: https:; connect-src *;')
+          }
+          next()
+        })
     exp.use(express.static('public'))
 
-    exp.get('/health', (req: express.Request, res: express.Response) => {
-      res.json({
-        status: 'ok',
-      })
-    })
+    exp.get(
+        '/health', (req: express.Request, res: express.Response) => {res.json({
+                     status: 'ok',
+                   })})
 
-    exp.get('/env', (req: express.Request, res: express.Response) => {
-      res.json({
-        dataApiBaseUrl: env.dataApiBaseUrl,
-        cmsApiBaseUrl: env.cmsApiBaseUrl,
-        wikidataImagePathname: env.wikidataImagePathname,
-        luxWikidataManifestPrefix: env.luxWikidataManifestPrefix,
-        luxFeedbackUrl: env.luxFeedbackUrl,
-        luxEnv: env.luxEnv,
-        maintenanceMode: env.maintenanceMode,
-        maintenanceMessage: env.maintenanceMessage,
-        cacheViewerMode: env.cacheViewerMode,
-        bugherdApiKey: env.bugherdApiKey,
-        oidcAuthority: env.oidcAuthority,
-        oidcClientId: env.oidcClientId,
-        oidcRedirectUri: env.oidcRedirectUri,
-        featureMyCollections: env.featureMyCollections,
-      })
-    })
+    exp.get('/env', (req: express.Request, res: express.Response) => {res.json({
+                      dataApiBaseUrl: env.dataApiBaseUrl,
+                      cmsApiBaseUrl: env.cmsApiBaseUrl,
+                      wikidataImagePathname: env.wikidataImagePathname,
+                      luxWikidataManifestPrefix: env.luxWikidataManifestPrefix,
+                      luxFeedbackUrl: env.luxFeedbackUrl,
+                      luxEnv: env.luxEnv,
+                      maintenanceMode: env.maintenanceMode,
+                      maintenanceMessage: env.maintenanceMessage,
+                      cacheViewerMode: env.cacheViewerMode,
+                      bugherdApiKey: env.bugherdApiKey,
+                      oidcAuthority: env.oidcAuthority,
+                      oidcClientId: env.oidcClientId,
+                      oidcRedirectUri: env.oidcRedirectUri,
+                      featureMyCollections: env.featureMyCollections,
+                      nluxLogo: env.nluxLogo,
+                      nluxPrimaryColor: env.nluxPrimaryColor,
+                      nluxSecondaryColor: env.nluxSecondaryColor,
+                      nluxFontColor: env.nluxFontColor,
+                    })})
 
     exp.get('/robots.txt', (req: express.Request, res: express.Response) => {
       let text = robotsNonProd
@@ -68,13 +80,11 @@ class App {
       res.type('text/plain').send(text)
     })
 
-    exp.use((req: express.Request, res: express.Response) => {
-      res.sendFile(path.join(__dirname, '..', 'public', 'index.html'))
-    })
+    exp.use(
+        (req: express.Request, res: express.Response) => {
+            res.sendFile(path.join(__dirname, '..', 'public', 'index.html'))})
 
-    exp.listen(port, () => {
-      log.info(`Listening on port ${port}`)
-    })
+    exp.listen(port, () => {log.info(`Listening on port ${port}`)})
   }
 }
 

@@ -1,12 +1,9 @@
-import { IAdvancedSearchConfigResponse } from '../types/IAdvancedSearchConfigResponse'
+import {IAdvancedSearchConfigResponse} from '../types/IAdvancedSearchConfigResponse'
 
+import {defaultAats, IAat} from './aat'
+import {advancedSearch, IAdvancedSearchConfig,} from './advancedSearch/advancedSearch'
+import {IServerConfig} from './IServerConfig'
 import * as localEnv from './localEnv'
-import { IServerConfig } from './IServerConfig'
-import {
-  advancedSearch,
-  IAdvancedSearchConfig,
-} from './advancedSearch/advancedSearch'
-import { IAat, defaultAats } from './aat'
 
 class Config {
   env: IServerConfig
@@ -39,10 +36,13 @@ class Config {
       oidcClientId: localEnv.oidcClientId,
       oidcRedirectUri: localEnv.oidcRedirectUri,
       featureMyCollections: localEnv.featureMyCollections,
-    }
-    this.hasLocalEnv =
-      localEnv.dataApiBaseUrl !== '' && localEnv.cmsApiBaseUrl !== ''
-    this.setDefaultAats()
+      nluxLogo: localEnv.nluxLogo,
+      nluxPrimaryColor: localEnv.nluxPrimaryColor,
+      nluxSecondaryColor: localEnv.nluxSecondaryColor,
+      nluxFontColor: localEnv.nluxFontColor,
+    } this.hasLocalEnv = localEnv.dataApiBaseUrl !== '' &&
+        localEnv.cmsApiBaseUrl !==
+            '' this.setDefaultAats() this.setDefaultAdvancedSearchConfig()
   }
 
   setServerConfig(data: IServerConfig): void {
@@ -61,27 +61,29 @@ class Config {
       oidcClientId: data.oidcClientId,
       oidcRedirectUri: data.oidcRedirectUri,
       featureMyCollections: data.featureMyCollections,
+      nluxLogo: data.nluxLogo,
+      nluxPrimaryColor: data.nluxPrimaryColor,
+      nluxSecondaryColor: data.nluxSecondaryColor,
+      nluxFontColor: data.nluxFontColor,
     }
   }
 
-  setDefaultAats(): void {
-    this.aat = defaultAats()
-  }
+  setDefaultAats(): void{this.aat = defaultAats()}
 
   setAats(data: IAat): void {
     // Default must be set again with the new base URL from the server
     this.setDefaultAats()
 
-    this.aat = { ...this.aat, ...data }
+        this.aat = {
+      ...this.aat,
+      ...data
+    }
   }
 
-  setDefaultAdvancedSearchConfig(): void {
-    this.advancedSearch = advancedSearch()
-  }
+  setDefaultAdvancedSearchConfig(): void{this.advancedSearch = advancedSearch()}
 
   setAdvancedSearch(data: IAdvancedSearchConfigResponse): void {
-    this.setDefaultAdvancedSearchConfig()
-    this.advancedSearch = {
+    this.setDefaultAdvancedSearchConfig() this.advancedSearch = {
       ...this.advancedSearch,
       ...data,
     }
@@ -96,6 +98,6 @@ export const getOidcAuthority = (): string => config.env.oidcAuthority
 export const getOidcClientId = (): string => config.env.oidcClientId
 export const getOidcRedirectUri = (): string => config.env.oidcRedirectUri
 export const getOidcJwksUri = (): string =>
-  `${getOidcAuthority()}/.well-known/jwks.json`
+    `${getOidcAuthority()}/.well-known/jwks.json`
 
 export default config

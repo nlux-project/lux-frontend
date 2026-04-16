@@ -57,3 +57,12 @@ export const myCollectionsUri = getString(
 export const featureMyCollections = getBoolean(
   import.meta.env.REACT_APP_FEATURE_MY_COLLECTIONS,
 )
+
+export const nluxLogo = getString(import.meta.env.REACT_APP_NLUX_LOGO)
+export const nluxPrimaryColor = getString(
+  import.meta.env.REACT_APP_NLUX_PRIMARY_COLOR,
+)
+export const nluxSecondaryColor = getString(
+  import.meta.env.REACT_APP_NLUX_SECONDARY_COLOR,
+)
+export const nluxFontColor = getString(import.meta.env.REACT_APP_NLUX_FONT_COLOR)

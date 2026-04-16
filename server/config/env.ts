@@ -43,3 +43,10 @@ export const oidcClientId = getString(process.env.OIDC_CLIENT_ID)
 export const oidcRedirectUri = getString(process.env.OIDC_REDIRECT_URI)
 
 export const featureMyCollections = getBool(process.env.FEATURE_MY_COLLECTIONS)
+
+export const nluxLogo = getString(process.env.NLUX_LOGO)
+export const nluxPrimaryColor = getString(process.env.NLUX_PRIMARY_COLOR)
+export const nluxSecondaryColor = getString(
+  process.env.NLUX_SECONDARY_COLOR,
+)
+export const nluxFontColor = getString(process.env.NLUX_FONT_COLOR)
