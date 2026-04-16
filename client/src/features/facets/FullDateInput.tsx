@@ -86,7 +86,7 @@ const FullDateInput: React.FC<IFacets> = ({
 
   let earliestFacet = getDefaultDate('')
   let defaultLatestFacet = getDefaultDate('')
-  if (facetValues.requests.hasOwnProperty('call1')) {
+  if (Object.prototype.hasOwnProperty.call(facetValues.requests ?? {}, 'call1')) {
     const dates = getDatesFromFacetValues(facetValues.requests.call1)
     if (dates.length > 0) {
       // Default is the facet value

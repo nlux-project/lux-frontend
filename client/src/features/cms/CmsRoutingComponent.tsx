@@ -20,14 +20,14 @@ const CmsRoutingComponent: React.FC = () => {
   const key = pageKey as string
 
   // About pages with sidebar menu
-  if (aboutPageRouteToKey.hasOwnProperty(key)) {
+  if (Object.prototype.hasOwnProperty.call(aboutPageRouteToKey ?? {}, key)) {
     return (
       <ContentPage pageKey={aboutPageRouteToKey[key]} pages={aboutPagesMap} />
     )
   }
 
   // Open Access pages with sidebar menu
-  if (openAccessPageRouteToKey.hasOwnProperty(key)) {
+  if (Object.prototype.hasOwnProperty.call(openAccessPageRouteToKey ?? {}, key)) {
     return (
       <ContentPage
         pageKey={openAccessPageRouteToKey[key]}
@@ -37,11 +37,11 @@ const CmsRoutingComponent: React.FC = () => {
   }
 
   // Terms of Use page without sidebar menu
-  if (termsOfUseRouteToKey.hasOwnProperty(key)) {
+  if (Object.prototype.hasOwnProperty.call(termsOfUseRouteToKey ?? {}, key)) {
     return <TermsOfUsePage pageKey={termsOfUseRouteToKey[key]} />
   }
 
-  if (faqPageRouteToKey.hasOwnProperty(key)) {
+  if (Object.prototype.hasOwnProperty.call(faqPageRouteToKey ?? {}, key)) {
     return <FaqPage groupKeys={faqPageRouteToKey[key]} />
   }
 

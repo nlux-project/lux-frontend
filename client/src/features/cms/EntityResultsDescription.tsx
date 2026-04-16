@@ -12,7 +12,7 @@ const EntityResultsDescription = (value: OverlayKey): string | null => {
   })
 
   if (isSuccess && data?.data) {
-    if (data.data.hasOwnProperty('attributes')) {
+    if (Object.prototype.hasOwnProperty.call(data.data ?? {}, 'attributes')) {
       return data.data.attributes.body
     }
     return null

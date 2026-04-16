@@ -104,7 +104,7 @@ const EditNamesForm: React.FC<IProps> = ({ data, onClose }) => {
     const { value } = e.target
     const newNoteArray = [...names]
     const noteToEdit = newNoteArray[indexOfNameToEdit]
-    if (noteToEdit.hasOwnProperty('classifications')) {
+    if (Object.prototype.hasOwnProperty.call(noteToEdit ?? {}, 'classifications')) {
       const { classifications } = noteToEdit
       if (noteToEdit.classifications?.includes(value)) {
         const indexOfClassificationToRemove = classifications?.indexOf(
@@ -128,7 +128,7 @@ const EditNamesForm: React.FC<IProps> = ({ data, onClose }) => {
     const { value } = e.target
     const newNoteArray = [...names]
     const noteToEdit = newNoteArray[indexOfNameToEdit]
-    if (noteToEdit.hasOwnProperty('languages')) {
+    if (Object.prototype.hasOwnProperty.call(noteToEdit ?? {}, 'languages')) {
       const { languages } = noteToEdit
       if (noteToEdit.languages?.includes(value)) {
         const indexOfClassificationToRemove = languages?.indexOf(

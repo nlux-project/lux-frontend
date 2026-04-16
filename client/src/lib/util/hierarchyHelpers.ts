@@ -1,4 +1,4 @@
-import { setWithMemberOf } from '../../config/setsSearchTags'
+import {setWithMemberOf} from '../../config/setsSearchTags'
 import IConcept from '../../types/data/IConcept'
 import IEntity from '../../types/data/IEntity'
 import ILinks from '../../types/data/ILinks'
@@ -10,13 +10,13 @@ import SetParser from '../parse/data/SetParser'
 
 // Check if the current uri is in the list of ancestors for the current entity
 export const isInHierarchy = (uri: string, ancestors: Array<string>): boolean =>
-  ancestors.includes(uri)
+    ancestors.includes(uri)
 
 export const removeViewFromPathname = (pathname: string): string =>
-  pathname.replace('/view/', '')
+    pathname.replace('/view/', '')
 
 export const currentUriInHierarchy = (uri: string, pathname: string): boolean =>
-  uri.includes(removeViewFromPathname(pathname))
+    uri.includes(removeViewFromPathname(pathname))
 
 /**
  * Parses the concept entity to determine if the /broader property exists
@@ -27,7 +27,8 @@ export const currentUriInHierarchy = (uri: string, pathname: string): boolean =>
 export const hasHierarchyHalLinks = (providedLinks: ILinks): string | null => {
   const halLinkToCheck = setWithMemberOf.searchTag
 
-  if (providedLinks.hasOwnProperty(halLinkToCheck)) {
+  if (Object.prototype.hasOwnProperty.call(
+          providedLinks ?? {}, halLinkToCheck)) {
     return providedLinks[halLinkToCheck].href
   }
 
@@ -44,11 +45,12 @@ export const getHalLinkForChildren = (
   entity: IEntity,
   ancestors: Array<{ id: string; childrenHalLink: string | null }>,
 ): string | null => {
-  let childrenHalLink = entity._links
-    ? hasHierarchyHalLinks(entity._links)
-    : null
+  let childrenHalLink =
+      entity._links ? hasHierarchyHalLinks(entity._links) : null
   for (const ancestor of ancestors) {
-    // if the current entity from the data is an ancestor, set it's childrenHalLink to the HAL link with the results page of its child within the current hierarchy
+    // if the current entity from the data is an ancestor, set it's
+    // childrenHalLink to the HAL link with the results page of its child within
+    // the current hierarchy
     if (ancestor.id === entity.id) {
       return ancestor.childrenHalLink
     }
@@ -79,12 +81,13 @@ export const getAncestorData = (data: {
         currentPageWithinParentResultsHalLink: null | string
       }) => {
         const parser = new EntityParser(ancestor.entity)
-        // the id of the ancestor and the results HAL link with the correct page of it's child within the hierarchy or the HAL link to get its children
+        // the id of the ancestor and the results HAL link with the correct page
+        // of it's child within the hierarchy or the HAL link to get its
+        // children
         return {
-          id: ancestor.entity.id!,
-          childrenHalLink:
-            ancestor.currentPageWithinParentResultsHalLink ||
-            parser.getHalLink(setWithMemberOf.searchTag),
+    id: ancestor.entity.id!,
+        childrenHalLink: ancestor.currentPageWithinParentResultsHalLink ||
+        parser.getHalLink(setWithMemberOf.searchTag),
         }
       },
     )
@@ -103,8 +106,7 @@ export const getAncestorData = (data: {
 export const getNextConceptUris = (concept: IEntity): Array<string> => {
   const parser = new ConceptParser(concept)
   const broaderId = parser.getBroaderId()
-  const uri = broaderId === null ? [] : [broaderId]
-  return uri
+  const uri = broaderId === null ? [] : [broaderId] return uri
 }
 
 /**
@@ -153,13 +155,13 @@ export const getNextSetUris = (entity: IEntity): Array<string> => {
   const memberOf = entity.member_of
   if (Array.isArray(memberOf) && memberOf.length > 0) {
     return memberOf
-      .map((member) => {
-        if (member.id !== undefined) {
-          return member.id
-        }
-        return ''
-      })
-      .filter((m) => m !== '')
+        .map((member) => {
+          if (member.id !== undefined) {
+            return member.id
+          }
+          return ''
+        })
+        .filter((m) => m !== '')
   }
   return []
 }

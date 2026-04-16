@@ -33,7 +33,7 @@ const DropdownCheckboxList = ({ state, stateId }: IProps): JSX.Element => {
   const keys = Object.keys(state)
   let allowedOptions: QueryOption[] = []
   for (const key of keys) {
-    if (!conditionals.hasOwnProperty(key) && !key.startsWith('_')) {
+    if (!Object.prototype.hasOwnProperty.call(conditionals ?? {}, key) && !key.startsWith('_')) {
       allowedOptions = getAllowedSearchOptions(scope, key) || []
     }
   }

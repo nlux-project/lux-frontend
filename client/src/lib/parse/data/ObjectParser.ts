@@ -1,37 +1,29 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { isUndefined } from 'lodash'
+import {isUndefined} from 'lodash'
 
 import config from '../../../config/config'
 import IDigitalObject from '../../../types/data/IDigitalObject'
-import IObject from '../../../types/data/IObject'
-import IEvent from '../../../types/data/IEvent'
-import { IEventInfo } from '../../../types/derived-data/events'
-import {
-  IContentWithLanguage,
-  INoteContent,
-} from '../../../types/IContentWithLanguage'
 import IEntity from '../../../types/data/IEntity'
+import IEvent from '../../../types/data/IEvent'
+import IObject from '../../../types/data/IObject'
+import {IEventInfo} from '../../../types/derived-data/events'
+import {IContentWithLanguage, INoteContent,} from '../../../types/IContentWithLanguage'
 
 import EntityParser from './EntityParser'
 import EventParser from './EventParser'
-import {
-  containsSpecificNote,
-  forceArray,
-  getClassifiedAs,
-  hasData,
-} from './helper'
+import {containsSpecificNote, forceArray, getClassifiedAs, hasData,} from './helper'
 
 export default class ObjectParser extends EntityParser {
   object: IObject
 
   constructor(json: IObject) {
-    super(json)
-    this.object = json
+    super(json) this.object = json
   }
 
   /**
    * Returns object with call number data or the first available identifier
-   * @returns {{label: string; identifier: Array<string>; carriedOutBy: Array<string>} | null}
+   * @returns {{label: string; identifier: Array<string>; carriedOutBy:
+   *     Array<string>} | null}
    */
   static getCallNumber(
     identifiers: Array<{
@@ -41,26 +33,24 @@ export default class ObjectParser extends EntityParser {
       equivalent: Array<string>
     }>,
   ): string | null {
-    if (identifiers.length > 0) {
-      for (const id of identifiers) {
-        if (
-          !isUndefined(id.equivalent) &&
-          id.equivalent.includes(config.aat.callNumber)
-        ) {
-          return id.identifier[0]
+        if (identifiers.length > 0) {
+          for (const id of identifiers) {
+            if (!isUndefined(id.equivalent) &&
+                id.equivalent.includes(config.aat.callNumber)) {
+              return id.identifier[0]
+            }
+          }
         }
+
+        return null
       }
-    }
 
-    return null
-  }
-
-  /**
-   * Returns array of uuids from /made_of
-   * @returns {Array<string>}
-   */
-  getMaterials(): Array<string> {
-    const materials = forceArray(this.object.made_of)
+      /**
+       * Returns array of uuids from /made_of
+       * @returns {Array<string>}
+       */
+      getMaterials():
+          Array<string>{const materials = forceArray(this.object.made_of)
     return getClassifiedAs(materials)
   }
 
@@ -100,155 +90,158 @@ export default class ObjectParser extends EntityParser {
    * @returns {IEvent | undefined}
    */
   getRawProductionEventSnippet(): IEvent | undefined {
-    let prod = this.object.produced_by
+      let prod = this.object.produced_by
 
-    if (prod === undefined) {
-      const encounteredBy = this.object.encountered_by
-      prod =
-        encounteredBy !== undefined && encounteredBy.length > 0
-          ? encounteredBy[0]
-          : prod
+      if (prod === undefined) {
+        const encounteredBy = this.object.encountered_by
+        prod = encounteredBy !== undefined && encounteredBy.length > 0 ?
+            encounteredBy[0] :
+            prod
+      }
+
+      if (this.object.type === 'DigitalObject') {
+        prod = this.object.created_by
+      }
+
+      return prod
     }
 
-    if (this.object.type === 'DigitalObject') {
-      prod = this.object.created_by
+    /**
+     * Returns the production event as it appears in the data from
+     * /produced_by if a HumanMadeObject or /created_by if a DigitalObject
+     * This is used for rendering event data on the entity pages.
+     * @returns {IEvent | undefined}
+     */
+    getRawProductionEvent(): IEvent|undefined {
+      let prod = this.object.produced_by
+
+      if (this.object.type === 'DigitalObject') {
+        prod = this.object.created_by
+      }
+
+      return prod
     }
 
-    return prod
-  }
+    /**
+     * Parses and returns transformed event data
+     * @returns {IEventInfo | null}
+     */
+    getProductionEvent(): IEventInfo|null {
+      const prod = this.getRawProductionEvent()
 
-  /**
-   * Returns the production event as it appears in the data from
-   * /produced_by if a HumanMadeObject or /created_by if a DigitalObject
-   * This is used for rendering event data on the entity pages.
-   * @returns {IEvent | undefined}
-   */
-  getRawProductionEvent(): IEvent | undefined {
-    let prod = this.object.produced_by
-
-    if (this.object.type === 'DigitalObject') {
-      prod = this.object.created_by
+      if (prod) {
+        return new EventParser(prod).getProductionEvent()
+      }
+      return null
     }
 
-    return prod
-  }
+    /**
+     * Parses and returns an array of transformed event data specifically from
+     * /encountered_by
+     * @returns {Array<IEventInfo | null>}
+     */
+    getEncounteredBy(): Array<IEventInfo|null> {
+      const encounteredBy = forceArray(this.object.encountered_by)
 
-  /**
-   * Parses and returns transformed event data
-   * @returns {IEventInfo | null}
-   */
-  getProductionEvent(): IEventInfo | null {
-    const prod = this.getRawProductionEvent()
+      if (encounteredBy.length === 0) {
+        return []
+      }
 
-    if (prod) {
-      return new EventParser(prod).getProductionEvent()
+      const encounters = encounteredBy.map(
+          (encounter) => new EventParser(encounter).getProductionEvent(),
+      )
+
+      return encounters
     }
-    return null
-  }
 
-  /**
-   * Parses and returns an array of transformed event data specifically from /encountered_by
-   * @returns {Array<IEventInfo | null>}
-   */
-  getEncounteredBy(): Array<IEventInfo | null> {
-    const encounteredBy = forceArray(this.object.encountered_by)
+    /**
+     * Returns array of transformed publication event data
+     * @returns {Array<IEventInfo>}
+     */
+    getPublicationEvent(): Array<IEventInfo> {
+      const usedFor = this.json.used_for
 
-    if (encounteredBy.length === 0) {
+      if (usedFor !== undefined && usedFor.length > 0) {
+        const events = [] for (const event of usedFor) {
+          events.push(new EventParser(event).getProductionEvent())
+        }
+        return events
+      }
+
       return []
     }
 
-    const encounters = encounteredBy.map((encounter) =>
-      new EventParser(encounter).getProductionEvent(),
-    )
+    /**
+     * Returns the agents from the production event
+     * @returns {Array<string>}
+     */
+    getAgentsFromProductionEvent(): Array<string> {
+      // This only requires snippet data as there is not a need to parse all of
+      // the possible events
+      const prod = this.getRawProductionEventSnippet()
 
-    return encounters
-  }
-
-  /**
-   * Returns array of transformed publication event data
-   * @returns {Array<IEventInfo>}
-   */
-  getPublicationEvent(): Array<IEventInfo> {
-    const usedFor = this.json.used_for
-
-    if (usedFor !== undefined && usedFor.length > 0) {
-      const events = []
-      for (const event of usedFor) {
-        events.push(new EventParser(event).getProductionEvent())
+      if (prod) {
+        const agents = new EventParser(prod).getAgentMap()
+        if (agents.length > 0) {
+          return agents.map((agent) => agent.id)
+        }
       }
-      return events
+      return []
     }
 
-    return []
-  }
-
-  /**
-   * Returns the agents from the production event
-   * @returns {Array<string>}
-   */
-  getAgentsFromProductionEvent(): Array<string> {
-    // This only requires snippet data as there is not a need to parse all of the possible events
-    const prod = this.getRawProductionEventSnippet()
-
-    if (prod) {
-      const agents = new EventParser(prod).getAgentMap()
+    /**
+     * Gets the uuid for the production event
+     * @returns {string | null}
+     */
+    getAgentFromProductionEvent(): string|null {
+      // This only requires snippet data as there is not a need to parse all of
+      // the possible events
+      const agents = this.getAgentsFromProductionEvent()
       if (agents.length > 0) {
-        return agents.map((agent) => agent.id)
+        return agents[0]
       }
-    }
-    return []
-  }
 
-  /**
-   * Gets the uuid for the production event
-   * @returns {string | null}
-   */
-  getAgentFromProductionEvent(): string | null {
-    // This only requires snippet data as there is not a need to parse all of the possible events
-    const agents = this.getAgentsFromProductionEvent()
-    if (agents.length > 0) {
-      return agents[0]
+      return null
     }
 
-    return null
-  }
+    /**
+     * Gets the date content for the production event
+     * @returns {string | null}
+     */
+    getDateFromProductionEvent(): string|null {
+      // This only requires snippet data as there is not a need to parse all of
+      // the possible events
+      const prod = this.getRawProductionEventSnippet()
 
-  /**
-   * Gets the date content for the production event
-   * @returns {string | null}
-   */
-  getDateFromProductionEvent(): string | null {
-    // This only requires snippet data as there is not a need to parse all of the possible events
-    const prod = this.getRawProductionEventSnippet()
-
-    if (prod) {
-      const dates = new EventParser(prod).getDates()
-      return dates.length > 0 ? dates[0] : null
+      if (prod) {
+        const dates = new EventParser(prod).getDates()
+        return dates.length > 0 ? dates[0] : null
+      }
+      return null
     }
-    return null
-  }
 
-  /**
-   * Gets the uuid for the location of the event
-   * @returns {string | null}
-   */
-  getLocationFromProductionEvent(): string | null {
-    // This only requires snippet data as there is not a need to parse all of the possible events
-    const prod = this.getRawProductionEventSnippet()
+    /**
+     * Gets the uuid for the location of the event
+     * @returns {string | null}
+     */
+    getLocationFromProductionEvent(): string|null {
+      // This only requires snippet data as there is not a need to parse all of
+      // the possible events
+      const prod = this.getRawProductionEventSnippet()
 
-    if (prod) {
-      const locations = new EventParser(prod).getLocations()
-      return locations.length > 0 ? locations[0] : null
+      if (prod) {
+        const locations = new EventParser(prod).getLocations()
+        return locations.length > 0 ? locations[0] : null
+      }
+      return null
     }
-    return null
-  }
 
-  /**
-   * Returns an array of uuids from /shows and /carries
-   * @returns {Array<string>}
-   */
-  getWorks(): Array<string> {
-    const shown = forceArray(this.object.shows).map((item) => item.id)
+    /**
+     * Returns an array of uuids from /shows and /carries
+     * @returns {Array<string>}
+     */
+    getWorks(): Array<string>{
+        const shown = forceArray(this.object.shows).map((item) => item.id)
     const carried = forceArray(this.object.carries).map((item) => item.id)
     return [...shown, ...carried].filter((id) => id !== undefined)
   }
@@ -258,29 +251,31 @@ export default class ObjectParser extends EntityParser {
    * @returns {Array<{ content: string; id: string }>}
    */
   getAccessPoints(): Array<{ content: string; id: string }> {
-    const accessPoints = forceArray(this.object.access_point)
+      const accessPoints = forceArray(this.object.access_point)
 
-    if (accessPoints.length === 0) {
-      return []
-    }
-
-    return accessPoints.map((point) => {
-      const identifiedBy = forceArray(point.identified_by)
-      let content = ''
-      if (identifiedBy.length > 0) {
-        content = identifiedBy[0].content
+      if (accessPoints.length === 0) {
+        return []
       }
 
-      return { content, id: point.id }
-    })
-  }
+      return accessPoints.map((point) => {
+        const identifiedBy = forceArray(point.identified_by)
+        let content = ''
+        if (identifiedBy.length > 0) {
+          content = identifiedBy[0].content
+        }
 
-  /**
-   * Returns array of uuids from /digitally_carries
-   * @returns {Array<string>}
-   */
-  getDigitallyCarries(): Array<string> {
-    const object = this.object as IDigitalObject
+        return {
+          content, id: point.id
+        }
+      })
+    }
+
+    /**
+     * Returns array of uuids from /digitally_carries
+     * @returns {Array<string>}
+     */
+    getDigitallyCarries():
+        Array<string>{const object = this.object as IDigitalObject
     const digitallyCarries = forceArray(object.digitally_carries)
 
     return getClassifiedAs(digitallyCarries)
@@ -305,28 +300,27 @@ export default class ObjectParser extends EntityParser {
     const dimensions = forceArray(this.json.dimension)
 
     return dimensions.map((dim) => {
-      const classifiedAs = forceArray(dim.classified_as)
-      let units = forceArray(dim.unit)
-      units = getClassifiedAs(units)
+    const classifiedAs = forceArray(dim.classified_as)
+    let units = forceArray(dim.unit)
+    units = getClassifiedAs(units)
 
-      const label: Array<IEntity> = []
-      for (const cl of classifiedAs) {
-        label.push(cl)
-      }
+    const label: Array<IEntity> = [] for (const cl of classifiedAs) {
+      label.push(cl)
+    }
 
-      let unit = units.length > 0 ? units[0] : ''
-      // overwrite the value of unit if the label contains the aat for typeOfPart
-      if (label.length > 0 && label[0].hasOwnProperty('equivalent')) {
-        const nestedObj = new ObjectParser(label[0])
-        if (nestedObj.getEquivalent().includes(config.aat.typeOfPart)) {
-          unit = ''
-        }
+    let unit = units.length > 0 ? units[0] : ''
+    // overwrite the value of unit if the label contains the aat for typeOfPart
+    if (label.length > 0 &&
+        Object.prototype.hasOwnProperty.call(label[0] ?? {}, 'equivalent')) {
+      const nestedObj = new ObjectParser(label[0])
+      if (nestedObj.getEquivalent().includes(config.aat.typeOfPart)) {
+        unit = ''
       }
-      return {
-        label: label.length > 0 ? (label[0].id as string) : '',
-        value: dim.value,
-        unit,
-      }
+    }
+    return {
+      label: label.length > 0 ? (label[0].id as string) : '', value: dim.value,
+          unit,
+    }
     })
   }
 
@@ -338,52 +332,51 @@ export default class ObjectParser extends EntityParser {
     string,
     null | string | Array<any> | IContentWithLanguage
   > | null {
-    const entityClass = this.getEntityClass('item')
+      const entityClass = this.getEntityClass('item')
 
-    const data: Record<string, any> = {
-      types: this.getTypes(),
-      titles: this.getNames(true),
-      entityClass,
-      identifiers: this.getIdentifiers(),
-      publicationEvents: this.getPublicationEvent(),
-      productionEvent: this.getProductionEvent(),
-      encounteredEvent: this.getEncounteredBy(),
-      materials: this.getMaterials(),
-      represents: this.getRepresents(),
-      notes: this.getNotes(),
-      dimensions: null,
-      exhibitionDescription: null,
-    }
+      const data: Record<string, any> = {
+        types: this.getTypes(),
+        titles: this.getNames(true),
+        entityClass,
+        identifiers: this.getIdentifiers(),
+        publicationEvents: this.getPublicationEvent(),
+        productionEvent: this.getProductionEvent(),
+        encounteredEvent: this.getEncounteredBy(),
+        materials: this.getMaterials(),
+        represents: this.getRepresents(),
+        notes: this.getNotes(),
+        dimensions: null,
+        exhibitionDescription: null,
+      }
 
-    const { notes } = data
-    const hasDimensions = containsSpecificNote(
-      notes,
-      config.aat.dimensionStatement,
-    )
-    data.dimensions = !hasDimensions ? this.getDimensions() : []
+      const {notes} = data
+      const hasDimensions = containsSpecificNote(
+          notes,
+          config.aat.dimensionStatement,
+      )
+      data.dimensions = !hasDimensions ? this.getDimensions() :
+                                         []
 
-    const hasExhibitions = containsSpecificNote(notes, config.aat.exhibition)
-    // remove the exhibition note from the notes
-    if (notes !== null && hasExhibitions) {
+          const hasExhibitions =
+              containsSpecificNote(notes, config.aat.exhibition)
+      // remove the exhibition note from the notes
+      if (notes !== null && hasExhibitions) {
       Object.keys(notes).map((key) => {
         notes[key].map((val: INoteContent) => {
-          if (!isUndefined(val.equivalent)) {
-            if (
-              val.equivalent.includes(config.aat.exhibition) &&
-              !isUndefined(notes[key])
-            ) {
-              data.exhibitionDescription = {
-                'Exhibitions Description': notes[key],
-              }
-              delete data.notes[key]
-            }
+        if (!isUndefined(val.equivalent)) {
+          if (val.equivalent.includes(config.aat.exhibition) &&
+              !isUndefined(notes[key])) {
+            data.exhibitionDescription = {
+              'Exhibitions Description': notes[key],
+            } delete data.notes[key]
           }
-          return null
+        }
+        return null
         })
         return null
       })
-    }
+      }
 
-    return hasData(data)
-  }
+      return hasData(data)
+    }
 }

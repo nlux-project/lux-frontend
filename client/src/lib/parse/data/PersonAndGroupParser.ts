@@ -1,41 +1,30 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { isUndefined } from 'lodash'
+import {isUndefined} from 'lodash'
 
 import config from '../../../config/config'
-import IEntity from '../../../types/data/IEntity'
 import IAgent from '../../../types/data/IAgent'
+import IEntity from '../../../types/data/IEntity'
 import IEvent from '../../../types/data/IEvent'
-import { IContentWithLanguage } from '../../../types/IContentWithLanguage'
 import ITimeSpan from '../../../types/data/ITimeSpan'
+import {IContentWithLanguage} from '../../../types/IContentWithLanguage'
 
 import EntityParser from './EntityParser'
-import {
-  addOneToBceYear,
-  convertEpochTime,
-  forceArray,
-  getBeginOfTheBegin,
-  getClassifiedAs,
-  getEndOfTheEnd,
-  hasData,
-  isPlaceholderYear,
-  transformDate,
-  validateClassifiedAsIdMatches,
-} from './helper'
+import {addOneToBceYear, convertEpochTime, forceArray, getBeginOfTheBegin, getClassifiedAs, getEndOfTheEnd, hasData, isPlaceholderYear, transformDate, validateClassifiedAsIdMatches,} from './helper'
 
 export default class PersonAndGroupParser extends EntityParser {
   agent: IAgent
 
   constructor(json: IAgent) {
-    super(json)
-    this.agent = json
+    super(json) this.agent = json
   }
 
   static getBeginOfTheBegin(timespan: ITimeSpan): string {
     let date
     if (timespan._seconds_since_epoch_begin_of_the_begin) {
       date = convertEpochTime(timespan._seconds_since_epoch_begin_of_the_begin)
-    } else if (timespan.begin_of_the_begin) {
+    }
+    else if (timespan.begin_of_the_begin) {
       date = timespan.begin_of_the_begin
     }
 
@@ -50,7 +39,8 @@ export default class PersonAndGroupParser extends EntityParser {
     let date
     if (timespan._seconds_since_epoch_end_of_the_end) {
       date = convertEpochTime(timespan._seconds_since_epoch_end_of_the_end)
-    } else if (timespan.end_of_the_end) {
+    }
+    else if (timespan.end_of_the_end) {
       date = timespan.end_of_the_end
     }
 
@@ -67,7 +57,7 @@ export default class PersonAndGroupParser extends EntityParser {
    * @returns {string}
    */
   static getDates(timeData: IEvent): string {
-    const { timespan } = timeData
+    const {timespan} = timeData
 
     if (isUndefined(timespan)) {
       return ''
@@ -122,7 +112,7 @@ export default class PersonAndGroupParser extends EntityParser {
    * @returns {string}
    */
   getBirthDate(): string {
-    const { born } = this.agent
+    const {born} = this.agent
     if (born !== undefined) {
       return PersonAndGroupParser.getDates(born)
     }
@@ -134,7 +124,7 @@ export default class PersonAndGroupParser extends EntityParser {
    * @returns {string}
    */
   getBirthYear(): string {
-    const { born } = this.agent
+    const {born} = this.agent
     if (born !== undefined && born.timespan !== undefined) {
       const date = getBeginOfTheBegin(born.timespan)
       return PersonAndGroupParser.transformYear(date)
@@ -147,7 +137,7 @@ export default class PersonAndGroupParser extends EntityParser {
    * @returns {string}
    */
   getBirthPlace(): string {
-    const { born } = this.agent
+    const {born} = this.agent
     if (born !== undefined) {
       return PersonAndGroupParser.getNestedTookPlaceAt(born)
     }
@@ -159,7 +149,7 @@ export default class PersonAndGroupParser extends EntityParser {
    * @returns {string}
    */
   getDeathDate(): string {
-    const { died } = this.agent
+    const {died} = this.agent
     if (died !== undefined) {
       return PersonAndGroupParser.getDates(died)
     }
@@ -171,7 +161,7 @@ export default class PersonAndGroupParser extends EntityParser {
    * @returns {string}
    */
   getDeathYear(): string {
-    const { died } = this.agent
+    const {died} = this.agent
     if (died !== undefined && died.timespan !== undefined) {
       const date = getBeginOfTheBegin(died.timespan)
       return PersonAndGroupParser.transformYear(date)
@@ -184,7 +174,7 @@ export default class PersonAndGroupParser extends EntityParser {
    * @returns {string}
    */
   getDeathPlace(): string {
-    const { died } = this.agent
+    const {died} = this.agent
     if (died !== undefined) {
       return PersonAndGroupParser.getNestedTookPlaceAt(died)
     }
@@ -267,7 +257,8 @@ export default class PersonAndGroupParser extends EntityParser {
   }
 
   /**
-   * Returns uuid of dissolution place for groups from /dissolved_by/took_place_at/id
+   * Returns uuid of dissolution place for groups from
+   * /dissolved_by/took_place_at/id
    * @returns {string}
    */
   getDissolutionPlace(): string {
@@ -279,7 +270,8 @@ export default class PersonAndGroupParser extends EntityParser {
   }
 
   /**
-   * Returns uuid of person who dissolved a group from /dissolved_by/carried_out_by/id
+   * Returns uuid of person who dissolved a group from
+   * /dissolved_by/carried_out_by/id
    * @returns {string}
    */
   getDissolutionPerson(): Array<string> {
@@ -292,46 +284,43 @@ export default class PersonAndGroupParser extends EntityParser {
   }
 
   /**
-   * Returns array of objects containing uuids from /classified_as along with their classification as the key
+   * Returns array of objects containing uuids from /classified_as along with
+   * their classification as the key
    * @returns {Array<{ [key: string]: Array<string> }>}
    */
-  getAllClassifiedAs(): Array<{ [key: string]: Array<string> }> {
-    const classifiedAs = forceArray(this.agent.classified_as)
+  getAllClassifiedAs(): Array<{[key: string]: Array<string>}>{
+      const classifiedAs = forceArray(this.agent.classified_as)
 
-    const data: Array<{ [key: string]: Array<string> }> = [{}]
+  const data: Array<{[key: string]: Array<string>}> = [{}]
 
-    classifiedAs.map((el: IEntity) => {
-      const nestedClassifiedAs = forceArray(el.classified_as)
-      const labelClassifications = getClassifiedAs(nestedClassifiedAs)
-      let label =
-        labelClassifications.length > 0
-          ? labelClassifications[0]
-          : 'Categorized As'
-      // check if AATs indicate the label should be overwritten
-      for (const cl of nestedClassifiedAs) {
-        if (cl.hasOwnProperty('equivalent')) {
-          const equivalent = forceArray(cl.equivalent)
-          for (const eq of equivalent) {
-            if (eq.id === config.aat.gender) {
-              label = 'Gender'
-            } else if (
-              eq.id === config.aat.occupation ||
-              eq.id === config.aat.role
-            ) {
-              label = 'Occupation/Role'
-            }
+  classifiedAs.map((el: IEntity) => {
+    const nestedClassifiedAs = forceArray(el.classified_as)
+    const labelClassifications = getClassifiedAs(nestedClassifiedAs)
+    let label = labelClassifications.length > 0 ? labelClassifications[0] :
+                                                  'Categorized As'
+    // check if AATs indicate the label should be overwritten
+    for (const cl of nestedClassifiedAs) {
+      if (Object.prototype.hasOwnProperty.call(cl ?? {}, 'equivalent')) {
+        const equivalent = forceArray(cl.equivalent)
+        for (const eq of equivalent) {
+          if (eq.id === config.aat.gender) {
+            label = 'Gender'
+          } else if (
+              eq.id === config.aat.occupation || eq.id === config.aat.role) {
+            label = 'Occupation/Role'
           }
         }
       }
+    }
 
-      data.map((d) => {
-        if (Object.keys(d).includes(label)) {
-          d[label].push(el.id ?? '')
-        } else {
-          d[label] = [el.id ?? '']
-        }
-      })
+    data.map((d) => {
+      if (Object.keys(d).includes(label)) {
+        d[label].push(el.id ?? '')
+      } else {
+        d[label] = [el.id ?? '']
+      }
     })
+  })
 
     return data
   }
@@ -342,58 +331,55 @@ export default class PersonAndGroupParser extends EntityParser {
    */
   // TODO: remove at a later date, this is no longer required
   getNationalities(): Array<string> {
-    const classifiedAs = forceArray(this.agent.classified_as)
-    const nationalities = []
+      const classifiedAs = forceArray(this.agent.classified_as)
+      const nationalities = []
 
-    for (const cl of classifiedAs) {
-      if (cl.hasOwnProperty('classified_as')) {
-        if (
-          validateClassifiedAsIdMatches(cl.classified_as, [
-            config.aat.nationality,
-          ])
-        ) {
-          nationalities.push(cl)
+          for (const cl of classifiedAs) {
+        if (Object.prototype.hasOwnProperty.call(cl ?? {}, 'classified_as')) {
+          if (validateClassifiedAsIdMatches(cl.classified_as, [
+                config.aat.nationality,
+              ])) {
+            nationalities.push(cl)
+          }
         }
       }
+
+      const nationalitiesIds = nationalities.map(
+          (nationality) => nationality.id || '',
+      )
+      return nationalitiesIds
     }
 
-    const nationalitiesIds = nationalities.map(
-      (nationality) => nationality.id || '',
-    )
-    return nationalitiesIds
-  }
+    /**
+     * Returns array of uuids /classified_as occupation or role
+     * @returns {Array<string>}
+     */
+    getOccupations(): Array<string> {
+      const classifiedAs = forceArray(this.agent.classified_as)
+      const occupations = []
 
-  /**
-   * Returns array of uuids /classified_as occupation or role
-   * @returns {Array<string>}
-   */
-  getOccupations(): Array<string> {
-    const classifiedAs = forceArray(this.agent.classified_as)
-    const occupations = []
-
-    for (const cl of classifiedAs) {
-      if (cl.hasOwnProperty('classified_as')) {
-        if (
-          validateClassifiedAsIdMatches(cl.classified_as, [
-            config.aat.occupation,
-            config.aat.role,
-          ])
-        ) {
-          occupations.push(cl)
+          for (const cl of classifiedAs) {
+        if (Object.prototype.hasOwnProperty.call(cl ?? {}, 'classified_as')) {
+          if (validateClassifiedAsIdMatches(cl.classified_as, [
+                config.aat.occupation,
+                config.aat.role,
+              ])) {
+            occupations.push(cl)
+          }
         }
       }
+
+      const occupationsIds =
+          occupations.map((occupation) => occupation.id || '')
+      return occupationsIds
     }
 
-    const occupationsIds = occupations.map((occupation) => occupation.id || '')
-    return occupationsIds
-  }
-
-  /**
-   * Returns array of uuids from /carried_out/took_place_at
-   * @returns {Array<string>}
-   */
-  getPlaceOfWork(): Array<string> {
-    const carriedOut = forceArray(this.agent.carried_out)
+    /**
+     * Returns array of uuids from /carried_out/took_place_at
+     * @returns {Array<string>}
+     */
+    getPlaceOfWork():
+        Array<string>{const carriedOut = forceArray(this.agent.carried_out)
     const places: Array<string> = []
 
     carriedOut.map((carried) => {
@@ -416,13 +402,13 @@ export default class PersonAndGroupParser extends EntityParser {
 
     carriedOut.map((activity) => {
       if (activity.timespan) {
-        const { timespan } = activity
-        const startDate = getBeginOfTheBegin(timespan)
-          ? PersonAndGroupParser.transformYear(timespan.begin_of_the_begin)
-          : ''
-        const endDate = getEndOfTheEnd(timespan)
-          ? PersonAndGroupParser.transformYear(timespan.end_of_the_end)
-          : ''
+        const {timespan} = activity
+        const startDate = getBeginOfTheBegin(timespan) ?
+            PersonAndGroupParser.transformYear(timespan.begin_of_the_begin) :
+            ''
+        const endDate = getEndOfTheEnd(timespan) ?
+            PersonAndGroupParser.transformYear(timespan.end_of_the_end) :
+            ''
         yearsActiveDates.push(`${startDate}-${endDate}`)
       }
     })
@@ -437,70 +423,72 @@ export default class PersonAndGroupParser extends EntityParser {
   getCarriedOut(): Array<Record<string, string>> {
     const carriedOut = forceArray(this.agent.carried_out)
 
-    const activities: Array<Record<string, string>> = carriedOut
-      .map((carried) => {
-        let type = ''
-        let location = ''
-        let startDate = ''
-        let endDate = ''
-        let dates = ''
+    const activities: Array<Record<string, string>> =
+        carriedOut
+            .map((carried) => {
+              let type = ''
+              let location = ''
+              let startDate = ''
+              let endDate = ''
+              let dates = ''
 
-        if (carried.took_place_at) {
-          const locations = getClassifiedAs(carried.took_place_at)
-          location = locations.length > 0 ? locations[0] : ''
-        }
-
-        if (carried.classified_as) {
-          const classifiedAs = forceArray(carried.classified_as)
-          const filteredTypes = classifiedAs
-            .filter((cl) => {
-              // Filter ids that contain the id corresponding with the label of "Professional Activity"
-              if (cl.hasOwnProperty('equivalent')) {
-                const equivalent = forceArray(cl.equivalent)
-                for (const eq of equivalent) {
-                  if (eq.id !== config.aat.active) {
-                    return cl.id
-                  }
-                }
-              } else {
-                return cl.id
+              if (carried.took_place_at) {
+                const locations = getClassifiedAs(carried.took_place_at)
+                location = locations.length > 0 ? locations[0] : ''
               }
-              return null
+
+              if (carried.classified_as) {
+                const classifiedAs = forceArray(carried.classified_as)
+                const filteredTypes =
+                    classifiedAs
+                        .filter((cl) => {
+                          // Filter ids that contain the id corresponding with
+                          // the label of "Professional Activity"
+                          if (Object.prototype.hasOwnProperty.call(
+                                  cl ?? {}, 'equivalent')) {
+                            const equivalent = forceArray(cl.equivalent)
+                            for (const eq of equivalent) {
+                              if (eq.id !== config.aat.active) {
+                                return cl.id
+                              }
+                            }
+                          } else {
+                            return cl.id
+                          }
+                          return null
+                        })
+                        .filter((cl) => cl !== null)
+                        .map((cl) => cl.id)
+                type = filteredTypes.length > 0 ? filteredTypes[0] : ''
+              }
+
+              if (carried.timespan) {
+                const beginOfTheBegin = getBeginOfTheBegin(carried.timespan)
+                startDate = PersonAndGroupParser.transformYear(beginOfTheBegin)
+                const endOfTheEnd = getEndOfTheEnd(carried.timespan)
+                endDate = PersonAndGroupParser.transformYear(endOfTheEnd)
+              }
+
+              if (startDate !== '' && endDate !== '') {
+                dates = `${startDate}-${endDate}`
+              } else if (startDate !== '') {
+                dates = startDate
+              } else if (endDate !== '') {
+                dates = endDate
+              }
+
+              return {
+                type, location, dates,
+              }
             })
-            .filter((cl) => cl !== null)
-            .map((cl) => cl.id)
-          type = filteredTypes.length > 0 ? filteredTypes[0] : ''
-        }
-
-        if (carried.timespan) {
-          const beginOfTheBegin = getBeginOfTheBegin(carried.timespan)
-          startDate = PersonAndGroupParser.transformYear(beginOfTheBegin)
-          const endOfTheEnd = getEndOfTheEnd(carried.timespan)
-          endDate = PersonAndGroupParser.transformYear(endOfTheEnd)
-        }
-
-        if (startDate !== '' && endDate !== '') {
-          dates = `${startDate}-${endDate}`
-        } else if (startDate !== '') {
-          dates = startDate
-        } else if (endDate !== '') {
-          dates = endDate
-        }
-
-        return {
-          type,
-          location,
-          dates,
-        }
-      })
-      .filter((activity) => {
-        // Remove any children that may contain no data
-        const { type, location, dates } = activity
-        if (type === '' && location === '' && dates === '') {
-          return null
-        }
-        return activity
-      })
+            .filter((activity) => {
+              // Remove any children that may contain no data
+              const {type, location, dates} = activity
+              if (type === '' && location === '' && dates === '') {
+                return null
+              }
+              return activity
+            })
 
     return activities
   }
@@ -519,71 +507,68 @@ export default class PersonAndGroupParser extends EntityParser {
    * @returns {string}
    */
   getUsername(): string {
-    const { died } = this.agent
-    if (died !== undefined) {
-      return PersonAndGroupParser.getDates(died)
-    }
-    return ''
-  }
-
-  /**
-   * Gets the data to be displayed in the About section
-   * @returns {Record<string, null | string | Array<any> | IContentWithLanguage> | null}
-   */
-  getAboutData(): Record<
-    string,
-    null | string | Array<any> | IContentWithLanguage
-  > | null {
-    // Shared between Person and Group
-    const classifiedAs = this.getAllClassifiedAs()
-    const entityClass = this.getEntityClass('agent')
-    const memberOf = this.getMemberOf()
-    const name = this.getPrimaryName(config.aat.langen)
-    const names = this.getNames()
-    const notes = this.getNotes()
-    const professionalActivity = this.getCarriedOut()
-    const residence = this.getResidence()
-    const webPages = this.getWebPages()
-
-    // Values only used by Person
-    const birthDate = this.getBirthDate()
-    const birthPlace = this.getBirthPlace()
-    const deathDate = this.getDeathDate()
-    const deathPlace = this.getDeathPlace()
-
-    // Values only used by Group
-    const formationDate = this.getFormationDate()
-    const formationPlace = this.getFormationPlace()
-    const formedBy = this.getFormationPerson()
-    const dissolutionDate = this.getDissolutionDate()
-    const dissolutionPlace = this.getDissolutionPlace()
-    const dissolvedBy = this.getDissolutionPerson()
-
-    const data: Record<
-      string,
-      null | string | Array<any> | IContentWithLanguage
-    > = {
-      name,
-      names,
-      entityClass,
-      memberOf,
-      classifiedAs,
-      residence,
-      professionalActivity,
-      webPages,
-      notes,
-      birthDate,
-      birthPlace,
-      deathDate,
-      deathPlace,
-      formationDate,
-      formationPlace,
-      formedBy,
-      dissolutionDate,
-      dissolutionPlace,
-      dissolvedBy,
+      const {died} = this.agent
+      if (died !== undefined) {
+        return PersonAndGroupParser.getDates(died)
+      }
+      return ''
     }
 
-    return hasData(data)
-  }
+    /**
+     * Gets the data to be displayed in the About section
+     * @returns {Record<string, null | string | Array<any> |
+     *     IContentWithLanguage> | null}
+     */
+    getAboutData():
+        Record<string, null|string|Array<any>|IContentWithLanguage>|null {
+      // Shared between Person and Group
+      const classifiedAs = this.getAllClassifiedAs()
+      const entityClass = this.getEntityClass('agent')
+      const memberOf = this.getMemberOf()
+      const name = this.getPrimaryName(config.aat.langen)
+      const names = this.getNames()
+      const notes = this.getNotes()
+      const professionalActivity = this.getCarriedOut()
+      const residence = this.getResidence()
+      const webPages = this.getWebPages()
+
+      // Values only used by Person
+      const birthDate = this.getBirthDate()
+      const birthPlace = this.getBirthPlace()
+      const deathDate = this.getDeathDate()
+      const deathPlace = this.getDeathPlace()
+
+      // Values only used by Group
+      const formationDate = this.getFormationDate()
+      const formationPlace = this.getFormationPlace()
+      const formedBy = this.getFormationPerson()
+      const dissolutionDate = this.getDissolutionDate()
+      const dissolutionPlace = this.getDissolutionPlace()
+      const dissolvedBy = this.getDissolutionPerson()
+
+      const data:
+          Record<string, null|string|Array<any>|IContentWithLanguage> = {
+            name,
+            names,
+            entityClass,
+            memberOf,
+            classifiedAs,
+            residence,
+            professionalActivity,
+            webPages,
+            notes,
+            birthDate,
+            birthPlace,
+            deathDate,
+            deathPlace,
+            formationDate,
+            formationPlace,
+            formedBy,
+            dissolutionDate,
+            dissolutionPlace,
+            dissolvedBy,
+          }
+
+      return hasData(data)
+    }
 }

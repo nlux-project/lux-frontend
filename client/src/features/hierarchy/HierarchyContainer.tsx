@@ -29,7 +29,7 @@ const getHalLink = (
   }
 
   const { searchTag } = halLink
-  if (links.hasOwnProperty(searchTag)) {
+  if (Object.prototype.hasOwnProperty.call(links ?? {}, searchTag)) {
     return links[searchTag].href
   }
 

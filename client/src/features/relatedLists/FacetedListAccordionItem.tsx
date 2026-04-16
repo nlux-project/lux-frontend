@@ -60,7 +60,7 @@ const FacetedListAccordionItem: React.FC<IProps> = ({
 
       const requestProperty = `call${page}`
       if (
-        !facets.requests.hasOwnProperty(requestProperty) &&
+        !Object.prototype.hasOwnProperty.call(facets.requests ?? {}, requestProperty) &&
         data.id.includes(`page=${page}`)
       ) {
         setFacets({

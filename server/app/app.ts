@@ -28,7 +28,8 @@ class App {
   }
 
   run(): void {
-    const {port} = this const exp = express()
+    const {port} = this
+    const exp = express()
     exp.use(cors())
     // Development-only Content Security Policy to allow eval during dev builds
     // (some dev bundles use eval for source-maps / hot-reload). Do NOT enable

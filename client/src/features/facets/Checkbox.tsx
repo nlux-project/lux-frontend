@@ -125,7 +125,7 @@ const Checkbox: React.FC<IProps> = ({
     let query = facetQuery || {}
     // TODO: get rid of keyof typeof
     const searchTerms = facetSearchTerms[scope as keyof typeof facetSearchTerms]
-    const { searchTermName, idFacet } = searchTerms.hasOwnProperty(facetSection)
+    const { searchTermName, idFacet } = Object.prototype.hasOwnProperty.call(searchTerms ?? {}, facetSection)
       ? // TODO: get rid of keyof typeof
         searchTerms[facetSection as keyof typeof searchTerms]
       : { searchTermName: null, idFacet: null }

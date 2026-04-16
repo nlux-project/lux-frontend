@@ -109,7 +109,7 @@ const EntityHeader: React.FC<IEntityHeader> = ({
   useTitle(shortenIfNeeded(displayName))
 
   useEffect(() => {
-    if (state && state.hasOwnProperty('showAlert')) {
+    if (state && Object.prototype.hasOwnProperty.call(state ?? {}, 'showAlert')) {
       setAlert(state as IRouteState)
     }
   }, [state])

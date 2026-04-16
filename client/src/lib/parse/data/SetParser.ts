@@ -1,26 +1,25 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { IEventInfo } from '../../../types/derived-data/events'
-import ISet from '../../../types/data/ISet'
 import config from '../../../config/config'
-import { IContentWithLanguage } from '../../../types/IContentWithLanguage'
+import ISet from '../../../types/data/ISet'
+import {IEventInfo} from '../../../types/derived-data/events'
+import {IContentWithLanguage} from '../../../types/IContentWithLanguage'
 
 import EntityParser from './EntityParser'
 import EventParser from './EventParser'
-import { forceArray, hasData } from './helper'
+import {forceArray, hasData} from './helper'
 
 export default class SetParser extends EntityParser {
   set: ISet
 
   constructor(json: ISet) {
-    super(json)
-    this.set = json
+    super(json) this.set = json
   }
 
   /**
    * Returns event data from /members_exemplified_by
    * @returns {IEventInfo | null}
    */
-  getCreationEvent(): IEventInfo | null {
+  getCreationEvent(): IEventInfo|null {
     const membersExemplifiedBy = forceArray(this.set.members_exemplified_by)
 
     for (const member of membersExemplifiedBy) {
@@ -36,7 +35,7 @@ export default class SetParser extends EntityParser {
    * Returns event data from /created_by
    * @returns {IEventInfo | null}
    */
-  getSourceCreationEvent(): IEventInfo | null {
+  getSourceCreationEvent(): IEventInfo|null {
     const createdBy = this.set.created_by
     if (createdBy !== undefined) {
       return new EventParser(createdBy).getProductionEvent()
@@ -52,7 +51,7 @@ export default class SetParser extends EntityParser {
   isArchive(): boolean {
     const classifiedAs = forceArray(this.json.classified_as)
     for (const cl of classifiedAs) {
-      if (cl.hasOwnProperty('equivalent')) {
+      if (Object.prototype.hasOwnProperty.call(cl ?? {}, 'equivalent')) {
         const equivalent = forceArray(cl.equivalent)
         for (const eq of equivalent) {
           if (eq.id === config.aat.archive) {
@@ -73,8 +72,7 @@ export default class SetParser extends EntityParser {
     const usedFor = this.json.used_for
 
     if (usedFor !== undefined && usedFor.length > 0) {
-      const events = []
-      for (const event of usedFor) {
+      const events = [] for (const event of usedFor) {
         events.push(new EventParser(event).getProductionEvent())
       }
       return events
@@ -99,12 +97,11 @@ export default class SetParser extends EntityParser {
 
   /**
    * Gets the data to be displayed in the About section
-   * @returns {Record<string, null | string | Array<any> | IContentWithLanguage> | null}
+   * @returns {Record<string, null | string | Array<any> | IContentWithLanguage>
+   *     | null}
    */
-  getAboutData(): Record<
-    string,
-    null | string | Array<any> | IContentWithLanguage
-  > | null {
+  getAboutData():
+      Record<string, null|string|Array<any>|IContentWithLanguage>|null {
     const names = this.getNames()
     const itemType = this.getTypes()
     const identifiers = this.getIdentifiers()

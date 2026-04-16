@@ -1,19 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import config from '../../../config/config'
-import { IOrderedItems } from '../../../types/ISearchResults'
-import {
-  ITimelinesTransformed,
-  ITransformedData,
-  TimelineSearchResult,
-} from '../../../types/ITimelines'
+import {IOrderedItems} from '../../../types/ISearchResults'
+import {ITimelinesTransformed, ITransformedData, TimelineSearchResult,} from '../../../types/ITimelines'
 
 export default class TimelineParser {
   timeline: TimelineSearchResult
-  transformedTimelineData: { [key: string]: any } | null
+  transformedTimelineData: {[key: string]: any}|null
 
   constructor(data: TimelineSearchResult) {
-    this.timeline = data
-    this.transformedTimelineData = null
+    this.timeline = data this.transformedTimelineData = null
   }
 
   /**
@@ -30,7 +25,7 @@ export default class TimelineParser {
    * @param {string} facetValue; the date provided by the data as a string
    * @returns {string | null}
    */
-  static getYearFromSingleFacetValue(facetValue: string): string | null {
+  static getYearFromSingleFacetValue(facetValue: string): string|null {
     const valueStr = String(facetValue)
     const date = new Date(valueStr)
     const utcFullYear = date.getUTCFullYear()
@@ -42,7 +37,8 @@ export default class TimelineParser {
   }
 
   /**
-   * Returns an array of the timeline data transformed from the results for rendering
+   * Returns an array of the timeline data transformed from the results for
+   * rendering
    * @param {string} id; the id returned with each orderedItem
    * @returns {string}
    */
@@ -52,19 +48,20 @@ export default class TimelineParser {
   }
 
   /**
-   * Returns an array of the timeline data transformed from the results for rendering
+   * Returns an array of the timeline data transformed from the results for
+   * rendering
    * @param {Array<IOrderedItems>} items; the results array
    * @param {ICriteria} criteria; the HAL link
    * @param {string} searchTag; the HAL link
    * @returns {Array<ITransformedData}
    */
   static addSearchTagToFacetValues(
-    items: Array<IOrderedItems>,
-    searchTag: string,
-  ): Array<ITransformedData> {
-    const transformedFacets: Array<ITransformedData> = []
-    for (const item of items) {
-      const { value, totalItems, id } = item
+      items: Array<IOrderedItems>,
+      searchTag: string,
+      ): Array<ITransformedData> {
+    const transformedFacets: Array<ITransformedData> =
+        [] for (const item of items) {
+      const {value, totalItems, id} = item
       if (value !== null) {
         transformedFacets.push({
           value: TimelineParser.getYearFromSingleFacetValue(value as string),
@@ -93,7 +90,8 @@ export default class TimelineParser {
   }
 
   /**
-   * Returns the sorted years with years that were not returned with the data in order to fill gaps in between years
+   * Returns the sorted years with years that were not returned with the data in
+   * order to fill gaps in between years
    * @param {Array<string>} years; the sorted years
    * @returns {Array<string>}
    */
@@ -118,8 +116,8 @@ export default class TimelineParser {
   }
 
   /**
-   * Returns the start and end index of the yearsRange to use for the timeline graph's brush.
-   * Calculated based on Interquartile Range (IQR)
+   * Returns the start and end index of the yearsRange to use for the timeline
+   * graph's brush. Calculated based on Interquartile Range (IQR)
    *
    * @param { Array<string> } sortedKeys
    * @param { ITimelinesTransformed | null } transformedData
@@ -127,20 +125,20 @@ export default class TimelineParser {
    * @returns { initialStart: number; initialEnd: number }
    */
   static getStartAndEndIndex(
-    sortedKeys: Array<string>,
-    transformedData: ITimelinesTransformed | null,
-    yearsRange: Array<string>,
-  ): { initialStart: number; initialEnd: number } {
+      sortedKeys: Array<string>,
+      transformedData: ITimelinesTransformed|null,
+      yearsRange: Array<string>,
+      ): {initialStart: number; initialEnd: number} {
     // create an array of years where each year is repeated based on its total
-    const proportionalYearArray = []
-    for (const year of sortedKeys) {
+    const proportionalYearArray = [] for (const year of sortedKeys) {
       const totalForYear = transformedData ? transformedData[year].total : 0
       for (let i = 0; i < totalForYear; i++) {
         proportionalYearArray.push(year)
       }
     }
 
-    // find the indexes that split the proportional data into lowest quarter and highest quarters
+    // find the indexes that split the proportional data into lowest quarter and
+    // highest quarters
     const q1Index = Math.floor(proportionalYearArray.length / 4)
     const q3Index = Math.floor((proportionalYearArray.length / 4) * 3)
 
@@ -151,7 +149,8 @@ export default class TimelineParser {
     // calculate interquartile range (span of middle 50% of data)
     const iqr = q3 - q1
 
-    // set a multiplication factor for iqr (larger means less datapoints are considered outliers, less means more data points are considered outliers)
+    // set a multiplication factor for iqr (larger means less datapoints are
+    // considered outliers, less means more data points are considered outliers)
     const factor = 1.5
     // calculate limits (quartiles +/- factor * iqr)
     const lowerLimit = Math.round(q1 - factor * iqr)
@@ -162,26 +161,24 @@ export default class TimelineParser {
 
     const output = {
       initialStart: lowerLimit < earliestYear ? 0 : lowerLimit - earliestYear,
-      initialEnd:
-        upperLimit > latestYear
-          ? yearsRange.length - 1
-          : upperLimit - earliestYear,
-    }
-    return output
+      initialEnd: upperLimit > latestYear ? yearsRange.length - 1 :
+                                            upperLimit - earliestYear,
+    } return output
   }
 
   /**
-   * Gets the facets returned with the data to help determine which relationships to show in the legend
+   * Gets the facets returned with the data to help determine which
+   * relationships to show in the legend
    * @param {ITimelinesTransformed} timelineData; the transformed timeline data
    * @returns {Array<string>}
    */
   static getFacetsUsedForLegend(
-    timelineData: ITimelinesTransformed,
-  ): Array<string> {
-    const facetKeys: Array<string> = []
-    for (const yearKey of Object.keys(timelineData)) {
-      const yearData = timelineData[yearKey]
-      for (const facetKey of Object.keys(yearData)) {
+      timelineData: ITimelinesTransformed,
+      ): Array<string> {
+    const facetKeys: Array<string> =
+        [] for (const yearKey of Object.keys(timelineData)) {
+      const yearData =
+          timelineData[yearKey] for (const facetKey of Object.keys(yearData)) {
         if (facetKey !== 'total' && !facetKeys.includes(facetKey)) {
           facetKeys.push(facetKey)
         }
@@ -192,31 +189,33 @@ export default class TimelineParser {
 
   /**
    * Returns the transformed timeline data for rendering
-   * @param {Array<{[key: string]: ISearchResults}>} data; the data from the HAL link requests
+   * @param {Array<{[key: string]: ISearchResults}>} data; the data from the HAL
+   *     link requests
    * @returns {ITimelinesTransformed}
    */
-  getTransformedTimelineData(): { [key: string]: any } {
+  getTransformedTimelineData(): {[key: string]: any} {
     // if we have already generated the transformedTimelineData, just return it
     if (this.transformedTimelineData !== null) {
       return this.transformedTimelineData
     }
-    // otherwise, we haven't already generated the transformedTimelineData, we need to generated it
+    // otherwise, we haven't already generated the transformedTimelineData, we
+    // need to generated it
 
     let transformedData: Array<ITransformedData> = []
 
-    for (const result of this.timeline) {
+        for (const result of this.timeline) {
       // the key is the api endpoint to retreive the facet values
       for (const key of Object.keys(result)) {
-        const { orderedItems } = result[key]
-        const searchTag = TimelineParser.getSearchTagFromFacetedSearch(key)
+        const {orderedItems} = result[key] const searchTag =
+            TimelineParser.getSearchTagFromFacetedSearch(key)
 
         if (orderedItems !== null && orderedItems.length > 0) {
           transformedData = [
             ...transformedData,
             ...TimelineParser.addSearchTagToFacetValues(
-              orderedItems,
-              searchTag,
-            ),
+                orderedItems,
+                searchTag,
+                ),
           ]
         }
       }
@@ -224,22 +223,24 @@ export default class TimelineParser {
 
     transformedData.filter((value) => value !== null)
 
-    const dateCounts: { [key: string]: any } = {}
-    for (const tData of transformedData) {
-      const { value, totalItems, searchTag, id } = tData as ITransformedData
+    const dateCounts:
+        {[key: string]: any} = {} for (const tData of transformedData) {
+      const {value, totalItems, searchTag, id} = tData as ITransformedData
       const date = String(value)
-      const individualDate = dateCounts[date]
-      if (Object.prototype.hasOwnProperty.call(dateCounts, date)) {
+      const individualDate = dateCounts[date] if (
+          Object.prototype.hasOwnProperty.call(dateCounts, date)) {
         individualDate.total += totalItems
         if (!Object.prototype.hasOwnProperty.call(individualDate, searchTag)) {
           individualDate[searchTag] = {
             totalItems,
             searchParams: id,
           }
-        } else {
+        }
+        else {
           dateCounts[date][searchTag].totalItems += totalItems
         }
-      } else {
+      }
+      else {
         dateCounts[date] = {
           total: totalItems,
           [searchTag]: {
@@ -258,15 +259,17 @@ export default class TimelineParser {
    * Gets the sorted timeline years
    * @returns {Array<string>}
    */
-  getSortedTimelineYears(): Array<string> {
-    return Object.keys(this.getTransformedTimelineData()).sort(
-      (a: string, b: string) => parseInt(a, 10) - parseInt(b, 10),
-    )
-  }
+  getSortedTimelineYears():
+      Array<string>{
+          return Object.keys(this.getTransformedTimelineData())
+              .sort(
+                  (a: string, b: string) => parseInt(a, 10) - parseInt(b, 10),
+                  )}
 
   /**
    * Gets the data to be displayed in the About section
-   * @returns {Record<string, null | string | Array<any> | IContentWithLanguage> | null}
+   * @returns {Record<string, null | string | Array<any> | IContentWithLanguage>
+   *     | null}
    */
   getYearsForTimelineGraph(): Array<string> {
     const sortedYears = this.getSortedTimelineYears()
