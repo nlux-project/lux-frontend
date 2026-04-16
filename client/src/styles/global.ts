@@ -5,6 +5,8 @@ import YaleNewRoman from '../resources/fonts/YaleNew-Roman.otf'
 import theme from './theme'
 
 const GlobalStyle = createGlobalStyle`
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;600;700&display=swap');
+
   @font-face {
     font-family: 'YaleNew', serif;
     src: url(${YaleNewRoman});
@@ -15,9 +17,9 @@ const GlobalStyle = createGlobalStyle`
     margin: 0;
     font-family: Inter, "Helvetica Neue", Arial, sans-serif;
     font-size: ${theme.font.size.normal};
-    font-weight: ${theme.font.weight.extraLight};
+    font-weight: ${theme.font.weight.regular};
     letter-spacing: 0;
-    line-height: 32px;
+    line-height: 28px;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     background-color: ${theme.color.offWhite};
