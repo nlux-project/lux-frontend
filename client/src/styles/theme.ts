@@ -123,20 +123,27 @@ const color = {
   },
 
   graphs: {
-    itemProductionDate: { focused: '#7A3F5C', unFocused: 'rgba(122, 63, 92, 0.15)' },
-    itemEncounteredDate: { focused: '#5A2B7A', unFocused: 'rgba(90, 43, 122, 0.12)' },
-    itemIncludedDate: { focused: '#2E5A9A', unFocused: 'rgba(46, 90, 154, 0.12)' },
-    workPublicationDate: { focused: '#8D6E63', unFocused: 'rgba(141, 110, 99, 0.12)' },
-    workCreationDate: { focused: '#2E7D32', unFocused: 'rgba(46, 125, 50, 0.12)' },
-    workGeneratedBy: { focused: '#00838F', unFocused: 'rgba(0, 131, 143, 0.12)' },
-    workCreationOrPublicationDate: { focused: '#000000', unFocused: 'rgba(0, 0, 0, 0.08)' },
-    setAboutDate: { focused: '#2D60B4', unFocused: 'rgba(45, 96, 180, 0.12)' },
-    setCausedByDate: { focused: '#283593', unFocused: 'rgba(40, 53, 147, 0.12)' },
-    setCreationDate: { focused: '#700370', unFocused: 'rgba(112, 3, 112, 0.12)' },
-    setPublicationDate: { focused: '#6e6e6e', unFocused: 'rgba(110, 110, 110, 0.08)' },
+    itemProductionDate:
+        {focused: '#7A3F5C', unFocused: 'rgba(122, 63, 92, 0.15)'},
+    itemEncounteredDate:
+        {focused: '#5A2B7A', unFocused: 'rgba(90, 43, 122, 0.12)'},
+    itemIncludedDate:
+        {focused: '#2E5A9A', unFocused: 'rgba(46, 90, 154, 0.12)'},
+    workPublicationDate:
+        {focused: '#8D6E63', unFocused: 'rgba(141, 110, 99, 0.12)'},
+    workCreationDate:
+        {focused: '#2E7D32', unFocused: 'rgba(46, 125, 50, 0.12)'},
+    workGeneratedBy: {focused: '#00838F', unFocused: 'rgba(0, 131, 143, 0.12)'},
+    workCreationOrPublicationDate:
+        {focused: '#000000', unFocused: 'rgba(0, 0, 0, 0.08)'},
+    setAboutDate: {focused: '#2D60B4', unFocused: 'rgba(45, 96, 180, 0.12)'},
+    setCausedByDate: {focused: '#283593', unFocused: 'rgba(40, 53, 147, 0.12)'},
+    setCreationDate: {focused: '#700370', unFocused: 'rgba(112, 3, 112, 0.12)'},
+    setPublicationDate:
+        {focused: '#6e6e6e', unFocused: 'rgba(110, 110, 110, 0.08)'},
   },
 
-  advancedSearch: { addRowText: '#8A8A8A' },
+  advancedSearch: {addRowText: '#8A8A8A'},
 }
 
 const spacing = {
@@ -207,8 +214,8 @@ const theme = {
   },
 
   contentPage: {
-    headerGap: '32px', // gap between title (h1) and body
-    footerGap: '64px', // gap between body and footer
+    headerGap: '32px',  // gap between title (h1) and body
+    footerGap: '64px',  // gap between body and footer
 
     h2: {
       fontSize: '3em',

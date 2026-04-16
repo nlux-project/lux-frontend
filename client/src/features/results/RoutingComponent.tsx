@@ -71,7 +71,7 @@ const RoutingComponent: React.FC = () => {
   })
 
   useEffect(() => {
-    if (state && state.hasOwnProperty('showAlert')) {
+  if (state && Object.prototype.hasOwnProperty.call(state, 'showAlert')) {
       setAlert(state as IRouteState)
     }
   }, [state])

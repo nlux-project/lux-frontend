@@ -89,7 +89,7 @@ const Graph: React.FC<IProps> = ({
   useEffect(() => {
     setGraphData(
       yearsArray.map((year) => {
-        const barData = timelineData && timelineData.hasOwnProperty(year)
+        const barData = timelineData && Object.prototype.hasOwnProperty.call(timelineData, year)
           ? timelineData[year]
           : { total: 0 }
         return {
