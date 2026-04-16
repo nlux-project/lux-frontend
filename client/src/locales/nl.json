@@ -1,0 +1,13 @@
+{
+  "header": {
+    "title": "LUX: Collectiezoeker",
+    "about": "Over LUX",
+    "openAccess": "Open Toegang",
+    "searchTips": "Zoektips",
+    "help": "Help",
+    "login": "Inloggen",
+    "myCollections": "Mijn Collecties",
+    "viewProfile": "Bekijk Profiel",
+    "logout": "Uitloggen"
+  }
+}
