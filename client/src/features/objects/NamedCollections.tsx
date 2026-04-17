@@ -22,7 +22,7 @@ const NamedCollections: React.FC<IApiText> = ({ entity }) => {
     },
   )
 
-  const formatRecordLinks = (links: Array<string>): Array<React.ReactNode> =>
+  const formatRecordLinks = (links: Array<string>): Array<JSX.Element> =>
     links
       .map((link, ind) => {
         if (link !== null) {
@@ -30,7 +30,7 @@ const NamedCollections: React.FC<IApiText> = ({ entity }) => {
         }
         return null
       })
-      .filter(Boolean) as Array<React.ReactNode>
+      .filter(Boolean) as Array<JSX.Element>
 
   if (isSuccess && data) {
     return (
