@@ -158,20 +158,18 @@ const App: React.FC = () => {
     // Apply optional NLUX branding from env/server config
     try {
       const root = document.documentElement
-      if (config.env.nluxPrimaryColor) {
-        root.style.setProperty('--nlux-primary', config.env.nluxPrimaryColor)
+      const env: any = config.env
+      if (env.nluxPrimaryColor) {
+        root.style.setProperty('--nlux-primary', env.nluxPrimaryColor)
       }
-      if (config.env.nluxSecondaryColor) {
-        root.style.setProperty(
-          '--nlux-secondary',
-          config.env.nluxSecondaryColor,
-        )
+      if (env.nluxSecondaryColor) {
+        root.style.setProperty('--nlux-secondary', env.nluxSecondaryColor)
       }
-      if (config.env.nluxFontColor) {
-        root.style.setProperty('--nlux-font', config.env.nluxFontColor)
+      if (env.nluxFontColor) {
+        root.style.setProperty('--nlux-font', env.nluxFontColor)
       }
-      if (config.env.nluxLogo) {
-        // allow components to use config.env.nluxLogo
+      if (env.nluxLogo) {
+        // allow components to use env.nluxLogo
       }
     } catch {
       // ignore

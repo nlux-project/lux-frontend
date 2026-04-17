@@ -65,6 +65,8 @@ const Header: React.FC<{ hideSearch?: boolean }> = ({ hideSearch }) => {
     pushClientEvent('Internal Link', 'Selected', `Internal ${link}`)
   }
 
+  const env: any = config.env
+
   if (config.env.featureMyCollections) {
     if (auth.isAuthenticated) {
       // console.log('Authenticated', auth.user)
@@ -93,10 +95,10 @@ const Header: React.FC<{ hideSearch?: boolean }> = ({ hideSearch }) => {
               className="navbar-brand titleHeading float-right d-flex align-items-center"
               onClick={() => handlePushClientEvent('Landing Page')}
             >
-              {config.env.nluxLogo ? (
+              {env.nluxLogo ? (
                 // show configured logo when provided
                 <img
-                  src={config.env.nluxLogo}
+                  src={env.nluxLogo}
                   alt={i18n.t('header.title')}
                   style={{ height: 36 }}
                 />
