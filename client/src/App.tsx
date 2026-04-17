@@ -101,10 +101,13 @@ const App: React.FC = () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     console.warn = (...args: any[]) => {
       try {
-        if (typeof args[0] === 'string' && args[0].includes('CssSelectorGenerator: shadow root inferred')) {
+        if (
+          typeof args[0] === 'string' &&
+          args[0].includes('CssSelectorGenerator: shadow root inferred')
+        ) {
           return
         }
-      } catch (e) {
+      } catch {
         // fall through
       }
       origWarn(...args)
@@ -159,7 +162,10 @@ const App: React.FC = () => {
         root.style.setProperty('--nlux-primary', config.env.nluxPrimaryColor)
       }
       if (config.env.nluxSecondaryColor) {
-        root.style.setProperty('--nlux-secondary', config.env.nluxSecondaryColor)
+        root.style.setProperty(
+          '--nlux-secondary',
+          config.env.nluxSecondaryColor,
+        )
       }
       if (config.env.nluxFontColor) {
         root.style.setProperty('--nlux-font', config.env.nluxFontColor)
@@ -167,7 +173,7 @@ const App: React.FC = () => {
       if (config.env.nluxLogo) {
         // allow components to use config.env.nluxLogo
       }
-    } catch (e) {
+    } catch {
       // ignore
     }
     return (
