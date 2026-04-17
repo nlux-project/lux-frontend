@@ -65,10 +65,8 @@ const SetResults: React.FC<IProps> = ({ searchResponse, isMobile }) => {
     return null
   }
 
-  const resultsList = (results: Array<IOrderedItems>): Array<JSX.Element> =>
+  const resultsList = (results: Array<IOrderedItems>): Array<React.ReactElement> =>
     results.map((result, ind) => {
-    const resultsList = (results: Array<IOrderedItems>): Array<React.ReactElement> =>
-      results.map((result, ind) => {
       if (config.env.featureMyCollections && subTab === 'my-collections') {
         return (
           <MyCollectionSnippet
