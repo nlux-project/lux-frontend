@@ -1,8 +1,19 @@
+
 import React, { useState } from 'react'
+import { useAuth } from 'react-oidc-context'
+import { NavLink } from 'react-router-dom'
 import { Container, Nav, NavDropdown, Navbar } from 'react-bootstrap'
 import styled from 'styled-components'
-import { NavLink } from 'react-router-dom'
-import { useAuth } from 'react-oidc-context'
+
+import config from '../../config/config'
+import { signout, verifyToken } from '../../lib/auth/helper'
+import { pushClientEvent } from '../../lib/pushClientEvent'
+
+import StyledHeader from '../../styles/features/header/Header'
+import theme from '../../styles/theme'
+import SearchContainer from '../search/SearchContainer'
+import i18n from '../../i18n'
+import SearchButton from './SearchButton'
 
 import config from '../../config/config'
 import { signout, verifyToken } from '../../lib/auth/helper'
@@ -11,6 +22,7 @@ import theme from '../../styles/theme'
 import SearchContainer from '../search/SearchContainer'
 import { pushClientEvent } from '../../lib/pushClientEvent'
 import i18n from '../../i18n'
+
 import SearchButton from './SearchButton'
 
 const headerTransitionDuration = '200ms'
@@ -156,7 +168,7 @@ const Header: React.FC<{ hideSearch?: boolean }> = ({ hideSearch }) => {
               {/* {config.env.featureMyCollections && auth.isAuthenticated && ( */}
               {config.env.featureMyCollections && isLoggedIn && (
                 <React.Fragment>
-                    <NavLink
+                  <NavLink
                     // TODO: change to correspond with the correct results page
                     to={`/view/results/collections/my-collections?q=${JSON.stringify({ _scope: 'set', createdBy: { username: auth.user?.profile['cognito:username'] } })}&viewingMyCollections=true&sQt=my-collections`}
                     className="nav-link"
@@ -164,7 +176,7 @@ const Header: React.FC<{ hideSearch?: boolean }> = ({ hideSearch }) => {
                   >
                     {i18n.t('header.myCollections')}
                   </NavLink>
-                    <NavDropdown
+                  <NavDropdown
                     title={auth.user?.profile?.name || 'username'}
                     id="user-navbar-dropdown"
                     data-testid="user-navbar-dropdown"
