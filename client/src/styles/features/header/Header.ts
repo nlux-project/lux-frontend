@@ -5,8 +5,10 @@ import theme from '../../theme'
 const Header = styled.div`
   width: 100%;
   .navbar {
-    background-color: var(--nlux-primary, ${
-    theme.color.primary.darkBlue}) !important;
+    background-color: var(
+      --nlux-primary,
+      ${theme.color.primary.darkBlue}
+    ) !important;
     padding: 1.25 auto;
 
     .container {

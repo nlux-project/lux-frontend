@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react'
 import { useAuth } from 'react-oidc-context'
 import { NavLink } from 'react-router-dom'
@@ -8,11 +7,11 @@ import styled from 'styled-components'
 import config from '../../config/config'
 import { signout, verifyToken } from '../../lib/auth/helper'
 import { pushClientEvent } from '../../lib/pushClientEvent'
-
 import StyledHeader from '../../styles/features/header/Header'
 import theme from '../../styles/theme'
 import SearchContainer from '../search/SearchContainer'
 import i18n from '../../i18n'
+
 import SearchButton from './SearchButton'
 
 const headerTransitionDuration = '200ms'

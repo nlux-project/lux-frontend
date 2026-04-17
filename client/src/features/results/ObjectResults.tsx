@@ -56,7 +56,9 @@ const ObjectResults: React.FC<IProps> = ({ searchResponse, isMobile }) => {
     return null
   }
 
-  const resultsList = (results: Array<IOrderedItems>): Array<React.ReactElement> =>
+  const resultsList = (
+    results: Array<IOrderedItems>,
+  ): Array<React.ReactElement> =>
     results.map((result, ind) => (
       <ObjectSnippet
         key={result.id}
