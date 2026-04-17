@@ -12,6 +12,7 @@ import SearchContainer from '../search/SearchContainer'
 import { pushClientEvent } from '../../lib/pushClientEvent'
 
 import SearchButton from './SearchButton'
+import i18n from '../../i18n'
 
 const headerTransitionDuration = '200ms'
 
@@ -88,10 +89,19 @@ const Header: React.FC<{ hideSearch?: boolean }> = ({ hideSearch }) => {
           <StyledSpan className="d-flex">
             <NavLink
               to="/"
-              className="navbar-brand titleHeading float-right"
+              className="navbar-brand titleHeading float-right d-flex align-items-center"
               onClick={() => handlePushClientEvent('Landing Page')}
             >
-              LUX: Yale Collections Discovery
+              {config.env.nluxLogo ? (
+                // show configured logo when provided
+                <img
+                  src={config.env.nluxLogo}
+                  alt={i18n.t('header.title')}
+                  style={{ height: 36 }}
+                />
+              ) : (
+                i18n.t('header.title')
+              )}
             </NavLink>
             <Navbar.Toggle
               aria-controls="responsive-navbar-nav"
@@ -108,28 +118,28 @@ const Header: React.FC<{ hideSearch?: boolean }> = ({ hideSearch }) => {
                 className="nav-link"
                 onClick={() => handlePushClientEvent('About LUX')}
               >
-                About LUX
+                {i18n.t('header.about')}
               </NavLink>
               <NavLink
                 to="/content/open-access"
                 className="nav-link"
                 onClick={() => handlePushClientEvent('Open Access')}
               >
-                Open Access
+                {i18n.t('header.openAccess')}
               </NavLink>
               <NavLink
                 to="/content/simple-search"
                 className="nav-link"
                 onClick={() => handlePushClientEvent('Search Tips')}
               >
-                Search Tips
+                {i18n.t('header.searchTips')}
               </NavLink>
               <NavLink
                 to="/content/faq"
                 className="nav-link"
                 onClick={() => handlePushClientEvent('Help')}
               >
-                Help
+                {i18n.t('header.help')}
               </NavLink>
               {/* {config.env.featureMyCollections && !auth.isAuthenticated && ( */}
               {config.env.featureMyCollections && !isLoggedIn && (
@@ -141,22 +151,22 @@ const Header: React.FC<{ hideSearch?: boolean }> = ({ hideSearch }) => {
                   onClick={() => auth.signinRedirect()}
                   data-testid="login-button"
                 >
-                  Login
+                  {i18n.t('header.login')}
                 </NavLink>
               )}
               {/* {config.env.featureMyCollections && auth.isAuthenticated && ( */}
               {config.env.featureMyCollections && isLoggedIn && (
                 <React.Fragment>
-                  <NavLink
+                    <NavLink
                     // TODO: change to correspond with the correct results page
                     to={`/view/results/collections/my-collections?q=${JSON.stringify({ _scope: 'set', createdBy: { username: auth.user?.profile['cognito:username'] } })}&viewingMyCollections=true&sQt=my-collections`}
                     className="nav-link"
                     data-testid="my-collections-button"
                   >
-                    My Collections
+                    {i18n.t('header.myCollections')}
                   </NavLink>
-                  <NavDropdown
-                    title="username TBD"
+                    <NavDropdown
+                    title={auth.user?.profile?.name || 'username'}
                     id="user-navbar-dropdown"
                     data-testid="user-navbar-dropdown"
                   >
@@ -165,7 +175,7 @@ const Header: React.FC<{ hideSearch?: boolean }> = ({ hideSearch }) => {
                       href="#"
                       className="navDropdownItem"
                     >
-                      View Profile
+                      {i18n.t('header.viewProfile')}
                     </NavDropdown.Item>
                     <NavDropdown.Item
                       // TODO: revert to the signout function
@@ -173,7 +183,7 @@ const Header: React.FC<{ hideSearch?: boolean }> = ({ hideSearch }) => {
                       onClick={() => signout(auth)}
                       className="navDropdownItem"
                     >
-                      Logout
+                      {i18n.t('header.logout')}
                     </NavDropdown.Item>
                   </NavDropdown>
                 </React.Fragment>

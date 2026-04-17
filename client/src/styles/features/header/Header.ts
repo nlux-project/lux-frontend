@@ -5,7 +5,7 @@ import theme from '../../theme'
 const Header = styled.div`
   width: 100%;
   .navbar {
-    background-color: ${theme.color.primary.darkBlue} !important;
+    background-color: var(--nlux-primary, ${theme.color.primary.darkBlue}) !important;
     padding: 1.25 auto;
 
     .container {
@@ -34,7 +34,7 @@ const Header = styled.div`
   }
 
   #nav-links a {
-    color: ${theme.color.white};
+    color: var(--nlux-font, ${theme.color.white});
     font-weight: ${theme.font.weight.medium};
 
     &.navDropdownItem {

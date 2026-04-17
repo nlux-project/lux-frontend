@@ -1,0 +1,24 @@
+{
+  "header.title": "LUX: Yale Collections Discovery",
+  "header.about": "About LUX",
+  "header.openAccess": "Open Access",
+  "header.searchTips": "Search Tips",
+  "header.help": "Help",
+  "header.login": "Login",
+  "header.myCollections": "My Collections",
+  "header.viewProfile": "View Profile",
+  "header.logout": "Logout"
+}
+{
+  "header": {
+    "title": "LUX: Yale Collections Discovery",
+    "about": "About LUX",
+    "openAccess": "Open Access",
+    "searchTips": "Search Tips",
+    "help": "Help",
+    "login": "Login",
+    "myCollections": "My Collections",
+    "viewProfile": "View Profile",
+    "logout": "Logout"
+  }
+}

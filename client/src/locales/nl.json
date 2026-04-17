@@ -1,0 +1,24 @@
+{
+  "header.title": "LUX: Collecties ontdekken",
+  "header.about": "Over LUX",
+  "header.openAccess": "Open Access",
+  "header.searchTips": "Zoektips",
+  "header.help": "Help",
+  "header.login": "Inloggen",
+  "header.myCollections": "Mijn collecties",
+  "header.viewProfile": "Bekijk profiel",
+  "header.logout": "Uitloggen"
+}
+{
+  "header": {
+    "title": "LUX: Collectiezoeker",
+    "about": "Over LUX",
+    "openAccess": "Open Toegang",
+    "searchTips": "Zoektips",
+    "help": "Help",
+    "login": "Inloggen",
+    "myCollections": "Mijn Collecties",
+    "viewProfile": "Bekijk Profiel",
+    "logout": "Uitloggen"
+  }
+}
