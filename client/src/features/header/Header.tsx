@@ -15,16 +15,6 @@ import SearchContainer from '../search/SearchContainer'
 import i18n from '../../i18n'
 import SearchButton from './SearchButton'
 
-import config from '../../config/config'
-import { signout, verifyToken } from '../../lib/auth/helper'
-import StyledHeader from '../../styles/features/header/Header'
-import theme from '../../styles/theme'
-import SearchContainer from '../search/SearchContainer'
-import { pushClientEvent } from '../../lib/pushClientEvent'
-import i18n from '../../i18n'
-
-import SearchButton from './SearchButton'
-
 const headerTransitionDuration = '200ms'
 
 const SeparatingLine = styled.div`
