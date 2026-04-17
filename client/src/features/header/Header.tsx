@@ -10,9 +10,8 @@ import StyledHeader from '../../styles/features/header/Header'
 import theme from '../../styles/theme'
 import SearchContainer from '../search/SearchContainer'
 import { pushClientEvent } from '../../lib/pushClientEvent'
-
-import SearchButton from './SearchButton'
 import i18n from '../../i18n'
+import SearchButton from './SearchButton'
 
 const headerTransitionDuration = '200ms'
 
