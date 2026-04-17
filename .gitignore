@@ -2,3 +2,5 @@
 config*.json
 .DS_Store
 */yarn.lock
+client/package.json
+client/yarn.lock
