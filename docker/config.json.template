@@ -42,5 +42,21 @@
   {
     "key": "MAINTENANCE_MESSAGE",
     "value": "LUX is down for maintenance. Please come back later."
+  },
+  {
+    "key": "NLUX_LOGO",
+    "value": "/nlux-logo.png"
+  },
+  {
+    "key": "NLUX_PRIMARY_COLOR",
+    "value": "#1F2937"
+  },
+  {
+    "key": "NLUX_SECONDARY_COLOR",
+    "value": "#D1D5DB"
+  },
+  {
+    "key": "NLUX_FONT_COLOR",
+    "value": "#F9FAFB"
   }
 ]

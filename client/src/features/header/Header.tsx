@@ -19,7 +19,7 @@ const headerTransitionDuration = '200ms'
 const SeparatingLine = styled.div`
   border-left-width: 1px;
   border-left-style: solid;
-  border-color: white;
+  border-color: var(--nlux-secondary, white);
   margin-right: 10px;
   margin-left: 10px;
 `

@@ -56,6 +56,10 @@ class App {
         oidcClientId: env.oidcClientId,
         oidcRedirectUri: env.oidcRedirectUri,
         featureMyCollections: env.featureMyCollections,
+        nluxLogo: env.nluxLogo,
+        nluxPrimaryColor: env.nluxPrimaryColor,
+        nluxSecondaryColor: env.nluxSecondaryColor,
+        nluxFontColor: env.nluxFontColor,
       })
     })
 

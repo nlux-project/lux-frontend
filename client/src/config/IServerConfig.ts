@@ -13,4 +13,8 @@ export interface IServerConfig {
   oidcClientId: string
   oidcRedirectUri: string
   featureMyCollections: boolean
+  nluxLogo: string
+  nluxPrimaryColor: string
+  nluxSecondaryColor: string
+  nluxFontColor: string
 }

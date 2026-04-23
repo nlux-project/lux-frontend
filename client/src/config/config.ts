@@ -39,6 +39,10 @@ class Config {
       oidcClientId: localEnv.oidcClientId,
       oidcRedirectUri: localEnv.oidcRedirectUri,
       featureMyCollections: localEnv.featureMyCollections,
+      nluxLogo: localEnv.nluxLogo,
+      nluxPrimaryColor: localEnv.nluxPrimaryColor,
+      nluxSecondaryColor: localEnv.nluxSecondaryColor,
+      nluxFontColor: localEnv.nluxFontColor,
     }
     this.hasLocalEnv =
       localEnv.dataApiBaseUrl !== '' && localEnv.cmsApiBaseUrl !== ''
@@ -61,6 +65,10 @@ class Config {
       oidcClientId: data.oidcClientId,
       oidcRedirectUri: data.oidcRedirectUri,
       featureMyCollections: data.featureMyCollections,
+      nluxLogo: data.nluxLogo,
+      nluxPrimaryColor: data.nluxPrimaryColor,
+      nluxSecondaryColor: data.nluxSecondaryColor,
+      nluxFontColor: data.nluxFontColor,
     }
   }
 
