@@ -26,5 +26,8 @@
     "places": "Places",
     "concepts": "Concepts",
     "events": "Events"
+  },
+  "object": {
+    "technique": "Technique"
   }
 }

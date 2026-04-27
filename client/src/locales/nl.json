@@ -26,5 +26,8 @@
     "places": "Plaatsen",
     "concepts": "Begrippen",
     "events": "Gebeurtenissen"
+  },
+  "object": {
+    "technique": "Techniek"
   }
 }

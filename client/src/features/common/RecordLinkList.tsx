@@ -5,7 +5,7 @@ import RecordLink from './RecordLink'
 const RecordLinksList = (links: Array<string>): JSX.Element[] =>
   links.map((link, ind) => (
     <React.Fragment key={`${link}_${ind}`}>
-      <RecordLink url={link} />
+      {link.startsWith('http') ? <RecordLink url={link} /> : link}
       <br />
     </React.Fragment>
   ))
