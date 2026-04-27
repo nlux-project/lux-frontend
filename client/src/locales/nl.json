@@ -9,5 +9,22 @@
     "myCollections": "Mijn Collecties",
     "viewProfile": "Bekijk Profiel",
     "logout": "Uitloggen"
+  },
+  "search": {
+    "open": "Zoeken openen",
+    "close": "Zoeken sluiten",
+    "inputLabel": "Zoekveld",
+    "placeholder": "Zoeken in NLUX",
+    "submit": "Zoeken",
+    "advanced": "Uitgebreid zoeken",
+    "tips": "Zoektips",
+    "wantToSearchFor": "Ik wil zoeken naar...",
+    "objects": "Objecten",
+    "works": "Werken",
+    "collections": "Collecties",
+    "peopleOrGroups": "Personen of groepen",
+    "places": "Plaatsen",
+    "concepts": "Begrippen",
+    "events": "Gebeurtenissen"
   }
 }

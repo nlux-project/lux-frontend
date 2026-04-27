@@ -1,17 +1,18 @@
 import React, { useEffect } from 'react'
+import { Row, Col } from 'react-bootstrap'
 import Dropdown from 'react-bootstrap/Dropdown'
 import { useNavigate } from 'react-router-dom'
-import { Row, Col } from 'react-bootstrap'
 
 import { useAppSelector } from '../../app/hooks'
+import { searchScope } from '../../config/searchTypes'
+import i18n from '../../i18n'
+import { pushClientEvent } from '../../lib/pushClientEvent'
+import { getParamPrefix } from '../../lib/util/params'
 import { translate } from '../../lib/util/translate'
 import { ISimpleSearchState } from '../../redux/slices/simpleSearchSlice'
 import StyledDropdown from '../../styles/shared/Dropdown'
-import { searchScope } from '../../config/searchTypes'
-import { getParamPrefix } from '../../lib/util/params'
-import Tooltip from '../common/Tooltip'
 import EntityResultsDescription from '../cms/EntityResultsDescription'
-import { pushClientEvent } from '../../lib/pushClientEvent'
+import Tooltip from '../common/Tooltip'
 
 interface IProps {
   setIsError: (x: boolean) => void
@@ -72,17 +73,19 @@ const AdvancedSearchButton: React.FC<IProps> = ({ setIsError, id }) => {
             id="advanced-search-dropdown-toggle"
             data-testid={`${id}-advanced-search-switch-dropdown-toggle`}
           >
-            Advanced Search
+            {i18n.t('search.advanced')}
           </Dropdown.Toggle>
 
           <Dropdown.Menu>
-            <Dropdown.Item disabled>I want to search for...</Dropdown.Item>
+            <Dropdown.Item disabled>
+              {i18n.t('search.wantToSearchFor')}
+            </Dropdown.Item>
             <Dropdown.Item
               as="button"
               eventKey="objects"
               data-testid={`${id}-objects-dropdown-item`}
             >
-              Objects
+              {i18n.t('search.objects')}
               <Tooltip
                 html={EntityResultsDescription('objects') || ''}
                 placement="bottom"
@@ -99,7 +102,7 @@ const AdvancedSearchButton: React.FC<IProps> = ({ setIsError, id }) => {
               eventKey="works"
               data-testid={`${id}-works-dropdown-item`}
             >
-              Works
+              {i18n.t('search.works')}
               <Tooltip
                 html={EntityResultsDescription('works') || ''}
                 placement="bottom"
@@ -116,7 +119,7 @@ const AdvancedSearchButton: React.FC<IProps> = ({ setIsError, id }) => {
               eventKey="collections"
               data-testid={`${id}-collections-dropdown-item`}
             >
-              Collections
+              {i18n.t('search.collections')}
               <Tooltip
                 html={EntityResultsDescription('collections') || ''}
                 placement="bottom"
@@ -133,7 +136,7 @@ const AdvancedSearchButton: React.FC<IProps> = ({ setIsError, id }) => {
               eventKey="people"
               data-testid={`${id}-people-and-groups-dropdown-item`}
             >
-              People or Groups
+              {i18n.t('search.peopleOrGroups')}
               <Tooltip
                 html={EntityResultsDescription('peopleAndOrgs') || ''}
                 placement="bottom"
@@ -150,7 +153,7 @@ const AdvancedSearchButton: React.FC<IProps> = ({ setIsError, id }) => {
               eventKey="places"
               data-testid={`${id}-places-dropdown-item`}
             >
-              Places
+              {i18n.t('search.places')}
               <Tooltip
                 html={EntityResultsDescription('places') || ''}
                 placement="bottom"
@@ -167,7 +170,7 @@ const AdvancedSearchButton: React.FC<IProps> = ({ setIsError, id }) => {
               eventKey="concepts"
               data-testid={`${id}-concepts-dropdown-item`}
             >
-              Concepts
+              {i18n.t('search.concepts')}
               <Tooltip
                 html={EntityResultsDescription('conceptsAndGroupings') || ''}
                 placement="bottom"
@@ -184,7 +187,7 @@ const AdvancedSearchButton: React.FC<IProps> = ({ setIsError, id }) => {
               eventKey="events"
               data-testid={`${id}-events-dropdown-item`}
             >
-              Events
+              {i18n.t('search.events')}
               <Tooltip
                 html={EntityResultsDescription('events') || ''}
                 placement="bottom"

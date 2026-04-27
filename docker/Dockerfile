@@ -7,10 +7,10 @@ ADD . /src
 RUN apt-get update && \
     apt-get install -y --no-install-recommends ca-certificates wget unzip jq procps && \
     cd /src/client/ && \
-    yarn install && \
-    npx update-browserslist-db@latest && \
+    npm ci --legacy-peer-deps && \
     cp index.html.template index.html && \
-    yarn build && \
+    npm run typescript && \
+    npx vite build && \
     cd /src/server/ && \
     yarn install && \
     yarn build && \

@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
+import i18n from '../../i18n'
 import close from '../../resources/images/icons/close.svg'
 import search from '../../resources/images/icons/search.svg'
 
@@ -24,13 +25,13 @@ const SearchButton: React.FC<{
 }> = ({ displaySearch, setIsSearchOpen }) => (
   <StyledButton
     type="button"
-    aria-label={displaySearch ? 'Close Search' : 'Open Search'}
+    aria-label={displaySearch ? i18n.t('search.close') : i18n.t('search.open')}
     onClick={() => setIsSearchOpen(!displaySearch)}
   >
     {displaySearch ? (
-      <CloseImg alt="Close Search" src={close} />
+      <CloseImg alt={i18n.t('search.close')} src={close} />
     ) : (
-      <SearchImg alt="Open Search" src={search} />
+      <SearchImg alt={i18n.t('search.open')} src={search} />
     )}
   </StyledButton>
 )

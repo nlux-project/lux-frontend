@@ -10,6 +10,7 @@ import StyledTermsOfUsePage from '../../styles/features/cms/TermsOfUsePage'
 
 interface IProps {
   pageKey: PageKey
+  fallbackTitle?: string
 }
 
 /**
@@ -17,13 +18,15 @@ interface IProps {
  * @param {PageKey} pageKey the name of the page used for retrieving the CMS data
  * @returns {JSX.Element}
  */
-const TermsOfUsePage: React.FC<IProps> = ({ pageKey }) => {
+const TermsOfUsePage: React.FC<IProps> = ({ pageKey, fallbackTitle }) => {
   const result = useGetPageQuery({ pageKey })
-  let title = ''
+  let title = fallbackTitle ?? ''
   let body = ''
 
   if (!result.isFetching && result.isSuccess && result.data) {
-    const parser = new ContentPageParser(result.data)
+    const parser = new ContentPageParser(result.data, {
+      title: fallbackTitle,
+    })
 
     title = parser.getTitle()
     body = parser.getBody()

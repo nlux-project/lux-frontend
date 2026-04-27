@@ -24,7 +24,7 @@ export const openAccessRouteMap = new Map([
   [`${CMS_PREFIX}/open-access-policy-2011`, 'Open Access Image Policy'],
 ])
 
-const termsOfUseRouteMap = new Map([
+export const termsOfUseRouteMap = new Map([
   [`${CMS_PREFIX}/terms-of-use`, 'Terms of Use'],
 ])
 

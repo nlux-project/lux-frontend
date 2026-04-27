@@ -9,5 +9,22 @@
     "myCollections": "My Collections",
     "viewProfile": "View Profile",
     "logout": "Logout"
+  },
+  "search": {
+    "open": "Open Search",
+    "close": "Close Search",
+    "inputLabel": "Search Input Box",
+    "placeholder": "Search NLUX",
+    "submit": "Search",
+    "advanced": "Advanced Search",
+    "tips": "Search Tips",
+    "wantToSearchFor": "I want to search for...",
+    "objects": "Objects",
+    "works": "Works",
+    "collections": "Collections",
+    "peopleOrGroups": "People or Groups",
+    "places": "Places",
+    "concepts": "Concepts",
+    "events": "Events"
   }
 }

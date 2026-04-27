@@ -8,7 +8,11 @@ import {
   openAccessPageRouteToKey,
 } from '../../config/cms'
 import ErrorPage from '../error/ErrorPage'
-import { aboutPagesMap, openAccessRouteMap } from '../../config/routerPages'
+import {
+  aboutPagesMap,
+  openAccessRouteMap,
+  termsOfUseRouteMap,
+} from '../../config/routerPages'
 
 import ContentPage from './ContentPage'
 import FaqPage from './FaqPage'
@@ -22,7 +26,11 @@ const CmsRoutingComponent: React.FC = () => {
   // About pages with sidebar menu
   if (aboutPageRouteToKey.hasOwnProperty(key)) {
     return (
-      <ContentPage pageKey={aboutPageRouteToKey[key]} pages={aboutPagesMap} />
+      <ContentPage
+        pageKey={aboutPageRouteToKey[key]}
+        pages={aboutPagesMap}
+        fallbackTitle={aboutPagesMap.get(`/content/${key}`)}
+      />
     )
   }
 
@@ -32,13 +40,19 @@ const CmsRoutingComponent: React.FC = () => {
       <ContentPage
         pageKey={openAccessPageRouteToKey[key]}
         pages={openAccessRouteMap}
+        fallbackTitle={openAccessRouteMap.get(`/content/${key}`)}
       />
     )
   }
 
   // Terms of Use page without sidebar menu
   if (termsOfUseRouteToKey.hasOwnProperty(key)) {
-    return <TermsOfUsePage pageKey={termsOfUseRouteToKey[key]} />
+    return (
+      <TermsOfUsePage
+        pageKey={termsOfUseRouteToKey[key]}
+        fallbackTitle={termsOfUseRouteMap.get(`/content/${key}`)}
+      />
+    )
   }
 
   if (faqPageRouteToKey.hasOwnProperty(key)) {
