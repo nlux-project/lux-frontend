@@ -1,4 +1,5 @@
 import { isUndefined } from 'lodash'
+import sanitizeHtml from 'sanitize-html'
 
 import config from '../../../config/config'
 import {
@@ -36,6 +37,16 @@ import {
   isEquivalent,
   getEquivalentFromClassifiedAsArray,
 } from './helper'
+
+const stripHtmlFromPlainText = (
+  content: string | undefined,
+): string | undefined =>
+  content !== undefined
+    ? sanitizeHtml(content, {
+        allowedAttributes: {},
+        allowedTags: [],
+      }).trim()
+    : undefined
 
 // Meant to be base class for other parsers
 export default class EntityParser {
@@ -464,7 +475,7 @@ export default class EntityParser {
       }
 
       const htmlContent = el._content_html
-      const contentToDisplay = el.content
+      const contentToDisplay = stripHtmlFromPlainText(el.content)
       if (contentToDisplay !== undefined || htmlContent !== undefined) {
         if (data.hasOwnProperty(label)) {
           // If the content has a language and it is english we want to push it to

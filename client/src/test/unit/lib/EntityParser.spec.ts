@@ -454,6 +454,31 @@ describe('EntityParser', () => {
         ],
       })
     })
+
+    it('strips html markup from plain note content', () => {
+      const element = new EntityParser({
+        type: 'HumanMadeObject',
+        referred_to_by: [
+          {
+            type: 'LinguisticObject',
+            content:
+              '<DIV STYLE="text-align:Justify;"><P><SPAN><SPAN>Rembrand van Rhijn Invent.</SPAN></SPAN></P></DIV>',
+          },
+        ],
+      })
+      const notes = element.getNotes()
+      expect(notes).toEqual({
+        'Additional Notes': [
+          {
+            content: 'Rembrand van Rhijn Invent.',
+            language: '',
+            _content_html: undefined,
+            equivalent: undefined,
+            notation: undefined,
+          },
+        ],
+      })
+    })
   })
 
   describe('getSupertypeIcon', () => {
