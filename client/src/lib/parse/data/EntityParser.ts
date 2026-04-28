@@ -588,6 +588,10 @@ export default class EntityParser {
         return [eventsIcon, 'Events']
       case 'Event':
         return [eventsIcon, 'Events']
+      case 'Production':
+        return [eventsIcon, 'Events']
+      case 'Encounter':
+        return [eventsIcon, 'Events']
       default:
         return ['', '']
     }
