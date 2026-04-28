@@ -23,6 +23,7 @@ import { IImages } from '../../../types/IImages'
 import { recordTypes } from '../../../config/advancedSearch/inputTypes'
 import { iconAats } from '../../../config/icons'
 import IWebpages from '../../../types/data/IWebpages'
+import IConcept from '../../../types/data/IConcept'
 
 import {
   forceArray,
@@ -47,6 +48,22 @@ const stripHtmlFromPlainText = (
         allowedTags: [],
       }).trim()
     : undefined
+
+const getNameClassificationLabels = (
+  classifications: Array<IConcept>,
+): Array<string> =>
+  classifications
+    .filter((classification) => {
+      if (
+        isEquivalent(classification, config.aat.first) ||
+        isEquivalent(classification, config.aat.invertedTerms)
+      ) {
+        return false
+      }
+      return true
+    })
+    .map((classification) => classification._label || classification.id)
+    .filter((label): label is string => label !== null && label !== undefined)
 
 // Meant to be base class for other parsers
 export default class EntityParser {
@@ -165,10 +182,10 @@ export default class EntityParser {
         // Get the label of the list of names from either the nested classified_as or nested identified_by
         if (classifiedAs.length > 0) {
           // Filter out inverted terms classifications
-          const ids = getClassifiedAs(classifiedAs, [config.aat.invertedTerms])
+          const labels = getNameClassificationLabels(classifiedAs)
           // check if there are multiple classifications for a name
-          if (ids.length > 0) {
-            ;[label] = ids
+          if (labels.length > 0) {
+            ;[label] = labels
           } else {
             return null
           }

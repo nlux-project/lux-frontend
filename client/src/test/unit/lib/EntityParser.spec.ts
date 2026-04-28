@@ -12,13 +12,11 @@ import {
   archivesId,
   copyrightStatement,
   displayName,
-  displayNameId,
   englishLanguageId,
   frenchLanguage,
   frenchLanguageId,
   invertedTerms,
   primaryName,
-  primaryNameId,
 } from '../../data/helperObjects'
 import physicalObject, { physicalObject as mockObject } from '../../data/object'
 
@@ -62,7 +60,7 @@ describe('EntityParser', () => {
       const parser = new EntityParser(mockEntity)
       const names = parser.getNames()
       expect(names).toEqual({
-        [`${config.env.dataApiBaseUrl}data/concept/primary-name`]: [
+        'Primary Name': [
           {
             content: 'Mock Entity',
             language: englishLanguageId,
@@ -72,7 +70,7 @@ describe('EntityParser', () => {
             language: frenchLanguageId,
           },
         ],
-        [`${config.env.dataApiBaseUrl}data/concept/display-name`]: [
+        'Display Name': [
           {
             content: 'Name with no language',
             language: '',
@@ -85,13 +83,13 @@ describe('EntityParser', () => {
       const parser = new EntityParser(mockEntity)
       const names = parser.getNames(true)
       expect(names).toEqual({
-        [`${config.env.dataApiBaseUrl}data/concept/primary-name`]: [
+        'Primary Name': [
           {
             content: 'animal de compagnie',
             language: frenchLanguageId,
           },
         ],
-        [`${config.env.dataApiBaseUrl}data/concept/display-name`]: [
+        'Display Name': [
           {
             content: 'Name with no language',
             language: '',
@@ -149,13 +147,13 @@ describe('EntityParser', () => {
       })
       const names = parser.getNames()
       expect(names).toEqual({
-        [primaryNameId]: [
+        'Primary Name': [
           {
             content: 'This should be returned 1',
             language: '',
           },
         ],
-        [displayNameId]: [
+        'Display Name': [
           {
             content: 'This should be returned 2',
             language: '',
@@ -198,7 +196,7 @@ describe('EntityParser', () => {
       })
       const names = parser.getNames(true)
       expect(names).toEqual({
-        [displayNameId]: [
+        'Display Name': [
           {
             content: 'Name with no language',
             language: '',
