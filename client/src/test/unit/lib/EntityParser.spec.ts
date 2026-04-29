@@ -596,6 +596,34 @@ describe('EntityParser', () => {
     })
   })
 
+  describe('getImages', () => {
+    it('returns image URLs from direct DigitalObject ids', () => {
+      const parser = new EntityParser({
+        id: 'test',
+        type: 'HumanMadeObject',
+        representation: [
+          {
+            type: 'VisualItem',
+            digitally_shown_by: [
+              {
+                id: 'https://collectie.huisvanhilde.nl/image.jpg',
+                type: 'DigitalObject',
+                format: 'image/jpeg',
+              },
+            ],
+          },
+        ],
+      })
+
+      expect(parser.getImages()).toEqual([
+        {
+          imageUrls: ['https://collectie.huisvanhilde.nl/image.jpg'],
+          attribution: '',
+        },
+      ])
+    })
+  })
+
   describe('isClassifiedAs', () => {
     it('returns true', () => {
       const parser = new EntityParser(mockEntity)

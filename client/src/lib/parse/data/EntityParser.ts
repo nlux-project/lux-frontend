@@ -415,10 +415,19 @@ export default class EntityParser {
       }
 
       for (const digital of digitallyShownBy) {
+        if (
+          typeof digital.id === 'string' &&
+          digital.id.match(/^https?:\/\//)
+        ) {
+          imageRep.imageUrls.push(digital.id)
+        }
+
         const accessPoint = forceArray(digital.access_point)
 
         for (const point of accessPoint) {
-          imageRep.imageUrls.push(point.id)
+          if (typeof point.id === 'string' && point.id.match(/^https?:\/\//)) {
+            imageRep.imageUrls.push(point.id)
+          }
         }
 
         const copyrightStatements = new EntityParser(
@@ -426,6 +435,8 @@ export default class EntityParser {
         ).getCopyrightLicensingStatement()
         imageRep.attribution =
           copyrightStatements.length > 0 ? copyrightStatements[0].content : ''
+      }
+      if (imageRep.imageUrls.length > 0) {
         imageReps.push(imageRep)
       }
     }
