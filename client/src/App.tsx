@@ -158,7 +158,7 @@ const App: React.FC = () => {
     // Apply optional NLUX branding from env/server config
     try {
       const root = document.documentElement
-      const env: any = config.env
+      const env = config.env
       if (env.nluxPrimaryColor) {
         root.style.setProperty('--nlux-primary', env.nluxPrimaryColor)
       }

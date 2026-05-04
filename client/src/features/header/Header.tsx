@@ -64,7 +64,7 @@ const Header: React.FC<{ hideSearch?: boolean }> = ({ hideSearch }) => {
     pushClientEvent('Internal Link', 'Selected', `Internal ${link}`)
   }
 
-  const env: any = config.env
+  const env = config.env
 
   if (config.env.featureMyCollections) {
     if (auth.isAuthenticated) {
