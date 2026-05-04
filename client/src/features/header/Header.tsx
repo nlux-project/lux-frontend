@@ -19,7 +19,7 @@ const headerTransitionDuration = '200ms'
 const SeparatingLine = styled.div`
   border-left-width: 1px;
   border-left-style: solid;
-  border-color: var(--nlux-secondary, white);
+  border-color: var(--nlux-secondary, ${theme.color.black20});
   margin-right: 10px;
   margin-left: 10px;
 `
@@ -31,7 +31,8 @@ const HeaderExpander = styled.div<{ $displaySearch: boolean }>`
   transition-duration: ${headerTransitionDuration};
   transition-timing-function: ease-in-out;
   width: 100%;
-  background-color: ${theme.color.primary.darkBlue};
+  background-color: var(--nlux-primary, ${theme.color.white});
+  border-bottom: 1px solid ${theme.color.black10};
   display: ${(props) => (props.$displaySearch ? 'block' : 'none')};
 
   margin: 0;
@@ -83,8 +84,8 @@ const Header: React.FC<{ hideSearch?: boolean }> = ({ hideSearch }) => {
       <Navbar
         collapseOnSelect
         expand="lg"
-        bg="dark"
-        variant="dark"
+        bg="light"
+        variant="light"
         className="w-auto px-4 py-3"
       >
         <Container fluid className="mx-0 navbarContainer">
@@ -206,10 +207,10 @@ const Header: React.FC<{ hideSearch?: boolean }> = ({ hideSearch }) => {
       <HeaderExpander $displaySearch={displaySearch}>
         <SearchContainer
           className="headerSearchContainer"
-          bgColor={theme.color.primary.darkBlue}
+          bgColor={theme.color.white}
           id="header-search-container"
           searchTipsStyle={{
-            color: theme.color.white,
+            color: theme.color.black,
             textDecoration: 'underline',
           }}
         />

@@ -3,7 +3,8 @@ import styled from 'styled-components'
 import theme from '../../theme'
 
 const Footer = styled.div`
-  background-color: ${theme.color.primary.darkBlue};
+  background-color: ${theme.color.white};
+  border-top: 1px solid ${theme.color.black10};
   height: 224px;
 
   @media (min-width: 576px) {
@@ -21,7 +22,7 @@ const Footer = styled.div`
     font-family: YaleDesign, serif;
     font-size: 2em;
     font-weight: 400;
-    color: ${theme.color.white};
+    color: ${theme.color.black};
   }
 
   footer {
@@ -54,7 +55,7 @@ const Footer = styled.div`
 
   li.nav-item a {
     margin-right: 16px;
-    color: white;
+    color: ${theme.color.black};
     letter-spacing: 0;
     text-align: right;
     font-weight: ${theme.font.weight.medium};
