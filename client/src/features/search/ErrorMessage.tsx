@@ -1,6 +1,8 @@
 import React from 'react'
 import { Alert, Col, Row } from 'react-bootstrap'
 
+import i18n from '../../i18n'
+
 const ErrorMessgae: React.FC<{
   onClose: (close: boolean) => void
 }> = ({ onClose }) => (
@@ -13,7 +15,7 @@ const ErrorMessgae: React.FC<{
         dismissible
         data-testid="search-error-message"
       >
-        <p className="fs-4 mb-0">Invalid search string detected.</p>
+        <p className="fs-4 mb-0">{i18n.t('status.invalidSearch')}</p>
       </Alert>
     </Col>
   </Row>

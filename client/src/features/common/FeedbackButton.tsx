@@ -6,6 +6,7 @@ import PrimaryButton from '../../styles/shared/PrimaryButton'
 import { pushClientEvent } from '../../lib/pushClientEvent'
 import useResizeableWindow from '../../lib/hooks/useResizeableWindow'
 import theme from '../../styles/theme'
+import i18n from '../../i18n'
 
 import ExternalLink from './ExternalLink'
 
@@ -42,7 +43,7 @@ const FeedbackButton: React.FC<IEntityPageBoolean> = ({ linkName }) => {
         href={`${config.env.luxFeedbackUrl}${currentURL}`}
         type="button"
         value="feedback"
-        aria-label="Submit feedback about this record"
+        aria-label={i18n.t('status.submitFeedback')}
         className="feedbackButton w-100"
         target="_blank"
         data-testid="submit-feedback-button"
@@ -54,7 +55,9 @@ const FeedbackButton: React.FC<IEntityPageBoolean> = ({ linkName }) => {
           )
         }
       >
-        {isMobile ? 'Give feedback' : 'Submit feedback about this record'}
+        {isMobile
+          ? i18n.t('status.giveFeedback')
+          : i18n.t('status.submitFeedback')}
         <i className="bi bi-box-arrow-up-right ms-1" />
       </PrimaryButton>
     </div>

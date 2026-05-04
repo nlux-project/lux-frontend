@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom'
 import { useAuth } from 'react-oidc-context'
 
 import useApiText from '../../lib/hooks/useApiText'
+import { translateLabel } from '../../lib/i18n/translateLabel'
 import {
   capitalizeLabels,
   transformStringForTestId,
@@ -53,6 +54,8 @@ const TextLabel: React.FC<ITextLabelProps> = ({
       ? capitalizeLabels(apiText)
       : displayLabel
 
+  displayLabel = translateLabel(displayLabel)
+
   const testId = label
     ? `${transformStringForTestId(label).toLowerCase()}-text-label`
     : 'text-label'
@@ -66,7 +69,7 @@ const TextLabel: React.FC<ITextLabelProps> = ({
         </dt>
       ) : (
         <dt hidden>
-          Label unknown
+          {translateLabel('Label unknown')}
           {tooltip}
         </dt>
       )}

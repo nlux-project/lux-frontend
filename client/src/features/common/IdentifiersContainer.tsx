@@ -3,6 +3,7 @@ import { Col } from 'react-bootstrap'
 
 import StyledDataRow from '../../styles/shared/DataRow'
 import StyledHr from '../../styles/shared/Hr'
+import { translateLabel } from '../../lib/i18n/translateLabel'
 
 import IdentifiersList from './IdentifiersList'
 
@@ -18,7 +19,9 @@ interface IIdentifiers {
 const IdentifiersContainer: React.FC<IIdentifiers> = ({ identifiers, id }) => (
   <StyledDataRow className="row">
     <Col xs={12} sm={12} md={3}>
-      <dt data-testid={`${id}-identifier-label`}>Identifiers</dt>
+      <dt data-testid={`${id}-identifier-label`}>
+        {translateLabel('Identifiers')}
+      </dt>
     </Col>
     <Col xs={12} sm={12} md={9}>
       <IdentifiersList identifiers={identifiers} />

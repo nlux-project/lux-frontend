@@ -4,6 +4,7 @@ import EntityParser from '../../lib/parse/data/EntityParser'
 import IEntity from '../../types/data/IEntity'
 import StyledDataRow from '../../styles/shared/DataRow'
 import { transformStringForTestId } from '../../lib/parse/data/helper'
+import i18n from '../../i18n'
 
 import ExpandableList from './ExpandableList'
 import ExternalLink from './ExternalLink'
@@ -39,14 +40,15 @@ const DataSources: React.FC<IProps> = ({ entity }) => {
 
   return (
     <div>
-      <h2 data-testid="data-sources-header">Data Sources</h2>
+      <h2 data-testid="data-sources-header">
+        {i18n.t('sections.dataSources')}
+      </h2>
       <div className="mb-2">
         <p>
-          This information has been automatically generated from the sources
-          below, and may be inaccurate.{' '}
+          {i18n.t('sections.dataSourcesDescription')}{' '}
           <InternalLink
             uri={`/content/about-lux-data`}
-            name="Learn more about LUX Data"
+            name={i18n.t('sections.learnMoreAboutLuxData')}
             linkCategory="About LUX Data"
           />
         </p>
