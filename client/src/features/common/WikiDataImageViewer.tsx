@@ -20,6 +20,10 @@ import UV from './UV'
  * @param {entity: IEntity} - an IEntity representing a LUX document
  */
 const WikiDataImageViewer: React.FC<{ entity: IEntity }> = ({ entity }) => {
+  if (config.env.luxWikidataManifestPrefix.trim() === '') {
+    return null
+  }
+
   const element = new EntityParser(entity)
   const imageReps = element.getImages()
 
