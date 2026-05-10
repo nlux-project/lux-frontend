@@ -53,9 +53,11 @@
     "events": "Gebeurtenissen"
   },
   "labels": {
-    "About": "Over",
+    "About": "Gegevens",
     "Access Point": "Toegangspunt",
+    "Accession Number": "Objectnummer",
     "Additional Identifiers": "Aanvullende identificatoren",
+    "Additional Notes": "Notities",
     "Additional Names": "Aanvullende namen",
     "Biography": "Biografie",
     "Background": "Achtergrond",
@@ -72,6 +74,7 @@
     "Created By": "Aangemaakt door",
     "Created On": "Aangemaakt op",
     "Creation": "Vervaardiging",
+    "Creation Additional": "Vervaardiger",
     "Creation of Archival Objects": "Vervaardiging van archiefobjecten",
     "Creation of Archive": "Vervaardiging van archief",
     "Creator": "Maker",
@@ -81,6 +84,7 @@
     "Death": "Overlijden",
     "Death Place": "Plaats van overlijden",
     "Depicts": "Beeldt af",
+    "Description": "Beschrijving",
     "Descriptions": "Beschrijvingen",
     "Dissolution Date": "Datum van opheffing",
     "Dissolution Place": "Plaats van opheffing",
@@ -128,7 +132,7 @@
     "Took Place At": "Vond plaats in",
     "Used For": "Gebruikt voor",
     "Web Pages": "Webpagina's",
-    "When": "Wanneer",
+    "When": "Datering",
     "Where": "Waar",
     "Work Class": "Werkklasse"
   },
