@@ -581,9 +581,14 @@ export const getWikiDataImageName = (url: string): string =>
  * @returns {string | null}
  */
 export const getWikidataImage = (images: Array<IImages>): string | null => {
+  const wikidataImagePathname = config.env.wikidataImagePathname.trim()
+  if (wikidataImagePathname === '') {
+    return null
+  }
+
   for (const image of images) {
     for (const url of image.imageUrls) {
-      if (url.includes(config.env.wikidataImagePathname)) {
+      if (url.includes(wikidataImagePathname)) {
         return url
       }
     }

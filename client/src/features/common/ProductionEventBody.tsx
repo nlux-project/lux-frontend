@@ -4,6 +4,7 @@ import { useAuth } from 'react-oidc-context'
 import { Row } from 'react-bootstrap'
 
 import useApiText from '../../lib/hooks/useApiText'
+import i18n from '../../i18n'
 import { capitalizeLabels } from '../../lib/parse/data/helper'
 import StyledAgents from '../../styles/features/common/Agents'
 import theme from '../../styles/theme'
@@ -176,7 +177,7 @@ const ProductionEventBody: React.FC<IProps> = ({
       {techniques.length > 0 && (
         <Row>
           <div className={keyClassName}>
-            <dt>Technique</dt>
+            <dt>{i18n.t('object.technique')}</dt>
           </div>
           <div className={valueClassName}>
             <dd data-testid={`${id}-event-technique`}>

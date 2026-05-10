@@ -12,17 +12,71 @@ import {
   archivesId,
   copyrightStatement,
   displayName,
-  displayNameId,
   englishLanguageId,
   frenchLanguage,
   frenchLanguageId,
   invertedTerms,
   primaryName,
-  primaryNameId,
 } from '../../data/helperObjects'
 import physicalObject, { physicalObject as mockObject } from '../../data/object'
 
 describe('EntityParser', () => {
+  describe('getAiResearch', () => {
+    const aiNote = {
+      type: 'LinguisticObject',
+      content: 'AI summary',
+      _content_html: '<p><strong>AI summary</strong></p>',
+      classified_as: [
+        {
+          id: 'http://localhost:8000/data/concept/9df7d6d7-88d5-48fd-81f7-8f12dc2d43bb',
+          type: 'Type',
+          _label: 'AI Research Analysis',
+        },
+      ],
+      identified_by: [{ type: 'Name', content: 'AI Research Analysis' }],
+    }
+
+    it('returns the separate AI research note', () => {
+      const parser = new EntityParser({
+        id: 'test',
+        type: 'HumanMadeObject',
+        referred_to_by: [aiNote],
+      })
+
+      expect(parser.getAiResearch()).toEqual({
+        content: 'AI summary',
+        htmlContent: '<p><strong>AI summary</strong></p>',
+        generatedLabel: 'AI Research Analysis',
+      })
+    })
+
+    it('filters AI research out of regular notes', () => {
+      const parser = new EntityParser({
+        id: 'test',
+        type: 'HumanMadeObject',
+        referred_to_by: [
+          aiNote,
+          {
+            type: 'LinguisticObject',
+            content: 'Regular note',
+            classified_as: [{ id: 'regular-note', type: 'Type' }],
+          },
+        ],
+      })
+
+      expect(parser.getNotes()).toEqual({
+        'regular-note': [
+          {
+            content: 'Regular note',
+            equivalent: [],
+            language: '',
+            notation: undefined,
+          },
+        ],
+      })
+    })
+  })
+
   describe('getWebPages', () => {
     it('returns array of web pages', () => {
       const parser = new EntityParser(mockEntity)
@@ -62,7 +116,7 @@ describe('EntityParser', () => {
       const parser = new EntityParser(mockEntity)
       const names = parser.getNames()
       expect(names).toEqual({
-        [`${config.env.dataApiBaseUrl}data/concept/primary-name`]: [
+        'Primary Name': [
           {
             content: 'Mock Entity',
             language: englishLanguageId,
@@ -72,7 +126,7 @@ describe('EntityParser', () => {
             language: frenchLanguageId,
           },
         ],
-        [`${config.env.dataApiBaseUrl}data/concept/display-name`]: [
+        'Display Name': [
           {
             content: 'Name with no language',
             language: '',
@@ -85,13 +139,13 @@ describe('EntityParser', () => {
       const parser = new EntityParser(mockEntity)
       const names = parser.getNames(true)
       expect(names).toEqual({
-        [`${config.env.dataApiBaseUrl}data/concept/primary-name`]: [
+        'Primary Name': [
           {
             content: 'animal de compagnie',
             language: frenchLanguageId,
           },
         ],
-        [`${config.env.dataApiBaseUrl}data/concept/display-name`]: [
+        'Display Name': [
           {
             content: 'Name with no language',
             language: '',
@@ -149,13 +203,13 @@ describe('EntityParser', () => {
       })
       const names = parser.getNames()
       expect(names).toEqual({
-        [primaryNameId]: [
+        'Primary Name': [
           {
             content: 'This should be returned 1',
             language: '',
           },
         ],
-        [displayNameId]: [
+        'Display Name': [
           {
             content: 'This should be returned 2',
             language: '',
@@ -198,7 +252,7 @@ describe('EntityParser', () => {
       })
       const names = parser.getNames(true)
       expect(names).toEqual({
-        [displayNameId]: [
+        'Display Name': [
           {
             content: 'Name with no language',
             language: '',
@@ -454,6 +508,31 @@ describe('EntityParser', () => {
         ],
       })
     })
+
+    it('strips html markup from plain note content', () => {
+      const element = new EntityParser({
+        type: 'HumanMadeObject',
+        referred_to_by: [
+          {
+            type: 'LinguisticObject',
+            content:
+              '<DIV STYLE="text-align:Justify;"><P><SPAN><SPAN>Rembrand van Rhijn Invent.</SPAN></SPAN></P></DIV>',
+          },
+        ],
+      })
+      const notes = element.getNotes()
+      expect(notes).toEqual({
+        'Additional Notes': [
+          {
+            content: 'Rembrand van Rhijn Invent.',
+            language: '',
+            _content_html: undefined,
+            equivalent: undefined,
+            notation: undefined,
+          },
+        ],
+      })
+    })
   })
 
   describe('getSupertypeIcon', () => {
@@ -570,6 +649,34 @@ describe('EntityParser', () => {
       const halLink = parser.getHalLink('fake tag')
 
       expect(halLink).toBeNull()
+    })
+  })
+
+  describe('getImages', () => {
+    it('returns image URLs from direct DigitalObject ids', () => {
+      const parser = new EntityParser({
+        id: 'test',
+        type: 'HumanMadeObject',
+        representation: [
+          {
+            type: 'VisualItem',
+            digitally_shown_by: [
+              {
+                id: 'https://collectie.huisvanhilde.nl/image.jpg',
+                type: 'DigitalObject',
+                format: 'image/jpeg',
+              },
+            ],
+          },
+        ],
+      })
+
+      expect(parser.getImages()).toEqual([
+        {
+          imageUrls: ['https://collectie.huisvanhilde.nl/image.jpg'],
+          attribution: '',
+        },
+      ])
     })
   })
 

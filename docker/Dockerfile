@@ -6,15 +6,11 @@ ADD . /src
 # procps contains "free" command
 RUN apt-get update && \
     apt-get install -y --no-install-recommends ca-certificates wget unzip jq procps && \
-    wget "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -O "awscliv2.zip" && \
-    unzip awscliv2.zip && \
-    ./aws/install && \
-    rm -rf ./aws && \
-    rm awscliv2.zip && \
     cd /src/client/ && \
-    yarn install && \
-    npx browserslist@latest --update-db && \
-    yarn build && \
+    npm ci --legacy-peer-deps && \
+    cp index.html.template index.html && \
+    npm run typescript && \
+    npx vite build && \
     cd /src/server/ && \
     yarn install && \
     yarn build && \

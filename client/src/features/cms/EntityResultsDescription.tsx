@@ -11,7 +11,7 @@ const EntityResultsDescription = (value: OverlayKey): string | null => {
     overlay: value,
   })
 
-  if (isSuccess && data) {
+  if (isSuccess && data?.data) {
     if (data.data.hasOwnProperty('attributes')) {
       return data.data.attributes.body
     }

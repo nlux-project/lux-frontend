@@ -8,6 +8,7 @@ import IPlace from '../../types/data/IPlace'
 import WebPages from '../common/WebPages'
 import StyledHr from '../../styles/shared/Hr'
 import StyledH2 from '../../styles/shared/H2'
+import AiResearch from '../common/AiResearch'
 
 interface IProps {
   entity: IPlace
@@ -54,6 +55,7 @@ const About: React.FC<IProps> = ({ entity }) => {
           </React.Fragment>
         )}
         <WebPages webPages={webPages} />
+        <AiResearch research={place.getAiResearch()} />
         {notes !== null && (
           <React.Fragment>
             <StyledHr width="100%" className="placeNotesHr" />

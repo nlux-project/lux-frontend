@@ -14,6 +14,7 @@ import ContentPageSideBar from './ContentPageSideBar'
 interface IProps {
   pageKey: PageKey
   pages: Map<string, string>
+  fallbackTitle?: string
 }
 
 /**
@@ -21,13 +22,15 @@ interface IProps {
  * @param {PageKey} pageKey the name of the page used for retrieving the CMS data
  * @returns {JSX.Element}
  */
-const ContentPage: React.FC<IProps> = ({ pageKey, pages }) => {
+const ContentPage: React.FC<IProps> = ({ pageKey, pages, fallbackTitle }) => {
   const result = useGetPageQuery({ pageKey })
-  let title = ''
+  let title = fallbackTitle ?? ''
   let body = ''
 
   if (!result.isFetching && result.isSuccess && result.data) {
-    const parser = new ContentPageParser(result.data)
+    const parser = new ContentPageParser(result.data, {
+      title: fallbackTitle,
+    })
 
     title = parser.getTitle()
     body = parser.getBody()

@@ -5,6 +5,8 @@ import styled from 'styled-components'
 
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import { searchScope } from '../../config/searchTypes'
+import i18n from '../../i18n'
+import { pushClientEvent } from '../../lib/pushClientEvent'
 import { checkForStopWords, translate } from '../../lib/util/translate'
 import {
   addSimpleSearchInput,
@@ -12,7 +14,6 @@ import {
 } from '../../redux/slices/simpleSearchSlice'
 import theme from '../../styles/theme'
 import LoadingSpinner from '../common/LoadingSpinner'
-import { pushClientEvent } from '../../lib/pushClientEvent'
 
 const StyledSearchBox = styled.div`
   display: flex;
@@ -178,14 +179,14 @@ const SearchBox: React.FC<{
           >
             <div className="input-group">
               <label htmlFor={id} className="d-none">
-                Search Input Box
+                {i18n.t('search.inputLabel')}
               </label>
               {/* If it is the results page, return input with value property */}
               <input
                 id={id}
                 type="text"
                 className="form-control"
-                placeholder="Search LUX"
+                placeholder={i18n.t('search.placeholder')}
                 onChange={handleInputChange}
                 ref={inputRef}
                 tabIndex={isUnselectable ? -1 : 0}
@@ -197,7 +198,7 @@ const SearchBox: React.FC<{
                   disabled={!validateInput()}
                   type="submit"
                   className="btn submitButton"
-                  aria-label="submit search input"
+                  aria-label={i18n.t('search.submit')}
                   data-testid={`${id}-search-submit-button`}
                 >
                   {isLoading ? (

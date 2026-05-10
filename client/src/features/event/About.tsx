@@ -17,6 +17,7 @@ import ExternalLink from '../common/ExternalLink'
 import StyledHr from '../../styles/shared/Hr'
 import ClassContainer from '../common/ClassContainer'
 import StyledH2 from '../../styles/shared/H2'
+import AiResearch from '../common/AiResearch'
 
 interface IProps {
   entity: IEntity
@@ -168,6 +169,7 @@ const About: React.FC<IProps> = ({ entity }) => {
             )}
           </React.Fragment>
         )}
+        <AiResearch research={event.getAiResearch()} />
         {notes !== null && (
           <React.Fragment>
             <StyledHr width="100%" className="eventNotesHr" />

@@ -17,6 +17,7 @@ import { subjectOf, workContains } from '../../config/worksSearchTags'
 import ApiAboutData from '../common/ApiAboutData'
 import ClassContainer from '../common/ClassContainer'
 import StyledH2 from '../../styles/shared/H2'
+import AiResearch from '../common/AiResearch'
 
 import DetailedLinkContainer from './DetailedLinkContainer'
 import AboutSubsection from './AboutSubsection'
@@ -143,6 +144,7 @@ const About: React.FC<IObject> = ({ entity }) => {
             />
           )}
           <SubjectOf entity={entity} halLinkConfig={subjectOf} />
+          <AiResearch research={work.getAiResearch()} />
           {notes !== null && (
             <NotesContainer
               notes={notes}

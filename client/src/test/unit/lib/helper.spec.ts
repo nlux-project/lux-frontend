@@ -585,6 +585,26 @@ describe('helper functions', () => {
       const image = getWikidataImage(mockData)
       expect(image).toEqual(mockImage)
     })
+
+    it('returns null when wikidata image config is blank', () => {
+      const originalPathname = config.env.wikidataImagePathname
+      config.env.wikidataImagePathname = ''
+
+      try {
+        const image = getWikidataImage([
+          {
+            imageUrls: [
+              'https://mmb-web.adlibhosting.com/ais6/webapi/image.jpg',
+            ],
+            attribution: '',
+          },
+        ])
+
+        expect(image).toBeNull()
+      } finally {
+        config.env.wikidataImagePathname = originalPathname
+      }
+    })
   })
 
   describe('getSpecificReferredToBy', () => {

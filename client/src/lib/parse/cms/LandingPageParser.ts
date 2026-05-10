@@ -16,14 +16,14 @@ export class LandingPageParser {
   }
 
   getWhatIsLux(): string {
-    return this.content.attributes.field_what_is_lu
+    return this.content?.attributes?.field_what_is_lu ?? ''
   }
 
   getMoreAboutLux(): string {
-    return this.content.attributes.field_more_about_lux
+    return this.content?.attributes?.field_more_about_lux ?? ''
   }
 
   getFooterBlocks(): string[] {
-    return this.content.attributes.field_footer_blocks
+    return this.content?.attributes?.field_footer_blocks ?? []
   }
 }

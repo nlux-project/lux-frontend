@@ -2,15 +2,16 @@ import React, { useState } from 'react'
 import { Col, Row } from 'react-bootstrap'
 import { HashLink } from 'react-router-hash-link'
 
+import i18n from '../../i18n'
+import useResizeableWindow from '../../lib/hooks/useResizeableWindow'
+import { pushClientEvent } from '../../lib/pushClientEvent'
 import { LinksContainerRow } from '../../styles/features/search/LinksContainerRow'
 import theme from '../../styles/theme'
 import ToggleButton from '../advancedSearch/ToggleSearchButton'
-import { pushClientEvent } from '../../lib/pushClientEvent'
-import useResizeableWindow from '../../lib/hooks/useResizeableWindow'
 
 import AdvancedSearchButton from './AdvancedSearchButton'
-import SearchBox from './SearchBox'
 import ErrorMessage from './ErrorMessage'
+import SearchBox from './SearchBox'
 
 interface IProps {
   className: string
@@ -83,7 +84,7 @@ const SearchContainer: React.FC<IProps> = ({
                   )
                 }
               >
-                Search Tips
+                {i18n.t('search.tips')}
               </HashLink>
             </Col>
           </LinksContainerRow>

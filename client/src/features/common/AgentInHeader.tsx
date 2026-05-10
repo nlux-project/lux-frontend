@@ -35,18 +35,20 @@ const AgentInHeader: React.FC<IAgents> = ({ data }) => {
     pageUri: loc.pathname,
     auth,
   })
+  const hasLifeYears = Boolean(birthYear || deathYear)
+  const hasNationality = nationalityIsReady && Boolean(nationality)
 
   return (
     <React.Fragment>
       {name !== undefined && name !== '' && (
         <StyledSpan data-testid="agent-in-header-name">{name}</StyledSpan>
       )}
-      {(birthYear !== '' || deathYear !== '') && (
+      {hasLifeYears && (
         <StyledSpan data-testid="agent-in-header-years">
           , {birthYear || ''}-{deathYear || ''}
         </StyledSpan>
       )}
-      {nationalityIsReady && nationality !== null && (
+      {hasNationality && (
         <StyledSpan data-testid="agent-in-header-nationality">
           , {nationality}
         </StyledSpan>

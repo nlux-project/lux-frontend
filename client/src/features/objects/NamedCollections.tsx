@@ -22,14 +22,15 @@ const NamedCollections: React.FC<IApiText> = ({ entity }) => {
     },
   )
 
-  const formatRecordLinks = (links: Array<string>): JSX.Element[] =>
+  const formatRecordLinks = (links: Array<string>): Array<React.ReactElement> =>
     links
       .map((link, ind) => {
         if (link !== null) {
           return <RecordLink key={`${link}_${ind}`} url={link} />
         }
+        return null
       })
-      .filter((link) => link !== undefined)
+      .filter(Boolean) as Array<React.ReactElement>
 
   if (isSuccess && data) {
     const nonNullData = data.filter((coll: string | null) => coll !== null)

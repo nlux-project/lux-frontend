@@ -7,6 +7,7 @@ import React, { useState } from 'react'
 import theme from '../../styles/theme'
 import useResizeableWindow from '../../lib/hooks/useResizeableWindow'
 import StyledHr from '../../styles/shared/Hr'
+import i18n from '../../i18n'
 
 interface IList {
   children: any
@@ -76,7 +77,7 @@ const ExpandableList: React.FC<IList> = ({
           onClick={() => setDisplayLength(numChildren)}
           data-testid="expandable-list-show-all"
         >
-          Show All
+          {i18n.t('status.showAll')}
         </button>
       )}
       {displayLength > length && (
@@ -86,7 +87,7 @@ const ExpandableList: React.FC<IList> = ({
           onClick={() => setDisplayLength(length)}
           data-testid="expandable-list-show-less"
         >
-          Show Less
+          {i18n.t('status.showLess')}
         </button>
       )}
       <StyledHr width="100%" $hiddenOnDesktop className={hrClassName} />

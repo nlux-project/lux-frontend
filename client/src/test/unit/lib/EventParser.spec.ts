@@ -229,13 +229,27 @@ describe('EventParser', () => {
     })
   })
 
-  describe('getTechinques', () => {
+  describe('getTechniques', () => {
     it('returns array of uuids', () => {
       const event = new EventParser(mockProductionEvent)
       const references = event.getTechniques()
       expect(references).toEqual([
         `${config.env.dataApiBaseUrl}data/concept/technique`,
       ])
+    })
+
+    it('returns label-only technique values', () => {
+      const event = new EventParser({
+        type: 'Production',
+        technique: [
+          {
+            type: 'Type',
+            _label: 'kopergravure',
+          },
+        ],
+      })
+      const references = event.getTechniques()
+      expect(references).toEqual(['kopergravure'])
     })
   })
 

@@ -7,6 +7,8 @@ import WorkParser from '../../lib/parse/data/WorkParser'
 import StyledDataRow from '../../styles/shared/DataRow'
 import IEntity from '../../types/data/IEntity'
 import { INoteContent } from '../../types/IContentWithLanguage'
+import i18n from '../../i18n'
+import { translateLabel } from '../../lib/i18n/translateLabel'
 
 import ExternalLink from './ExternalLink'
 import TextNote from './TextNote'
@@ -41,14 +43,16 @@ const CanIReuseIt: React.FC<IProps> = ({ entity, entityType }) => {
   return (
     <StyledDataRow className="row" data-testid="can-i-reuse-it">
       <Col xs={12}>
-        <h2 data-testid="can-i-reuse-it-header">Can I re-use it?</h2>
+        <h2 data-testid="can-i-reuse-it-header">
+          {i18n.t('sections.canIReuseIt')}
+        </h2>
       </Col>
       <Col xs={12}>
         {entityType === 'work' && subjectTo.length > 0 && (
           <Row>
             <dl className="mb-1">
               <Col xs={12}>
-                <dt>Subject To</dt>
+                <dt>{translateLabel('Subject To')}</dt>
               </Col>
               {subjectTo.map((subject, ind) => (
                 <Col xs={12} key={`${subject.text}_${ind}`}>
@@ -66,12 +70,12 @@ const CanIReuseIt: React.FC<IProps> = ({ entity, entityType }) => {
         )}
         {entityType !== 'work' && carries.length > 0 && (
           <p data-testid="rights-information-statement">
-            Rights information may be available on the associated Works page.
+            {i18n.t('sections.rightsMayBeAvailable')}
           </p>
         )}
         {carries.length === 0 && subjectTo.length === 0 && (
           <p data-testid="under-certain-curcumstances">
-            Under Certain Circumstances
+            {i18n.t('sections.underCertainCircumstances')}
             <Tooltip html={reuse} placement="bottom">
               <i
                 className="bi bi-question-circle"
@@ -90,8 +94,7 @@ const CanIReuseIt: React.FC<IProps> = ({ entity, entityType }) => {
       <Col xs={12}>
         <InternalLink
           uri="/content/rights-usage"
-          name="For more information about Rights and Usage, visit the LUX Frequently
-          Asked Questions."
+          name={i18n.t('sections.rightsInfo')}
           linkCategory="FAQ Rights Info"
         />
       </Col>

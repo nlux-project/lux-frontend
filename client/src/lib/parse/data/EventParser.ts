@@ -326,12 +326,17 @@ export default class EventParser extends EntityParser {
   }
 
   /**
-   * Returns array of uuids from /technique
+   * Returns array of uuids or label-only values from /technique
    * @returns {Array<string>}
    */
   getTechniques(): Array<string> {
     const technique = forceArray(this.event.technique)
-    return technique ? getClassifiedAs(technique) : []
+    const techniqueIds = technique ? getClassifiedAs(technique) : []
+    const techniqueLabels = technique
+      .filter((item) => item.id === undefined && item._label !== undefined)
+      .map((item) => item._label as string)
+
+    return [...techniqueIds, ...techniqueLabels]
   }
 
   /**

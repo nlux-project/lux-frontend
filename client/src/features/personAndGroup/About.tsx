@@ -10,6 +10,7 @@ import ClassContainer from '../common/ClassContainer'
 import WebPages from '../common/WebPages'
 import StyledHr from '../../styles/shared/Hr'
 import StyledH2 from '../../styles/shared/H2'
+import AiResearch from '../common/AiResearch'
 
 import Dates from './Dates'
 import Activity from './Activity'
@@ -153,6 +154,7 @@ const About: React.FC<IProps> = ({ data }) => {
           <Activity data={professionalActivity} />
         )}
         <WebPages webPages={webPages} />
+        <AiResearch research={agent.getAiResearch()} />
         {notes !== null && (
           <React.Fragment>
             <StyledHr width="100%" className="personOrGroupNotesHr" />

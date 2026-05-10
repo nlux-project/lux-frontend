@@ -15,6 +15,13 @@ vi.mock('../../../../redux/api/ml_api', () => ({
   }),
 }))
 
+vi.mock('react-oidc-context', () => ({
+  useAuth: () => ({
+    isAuthenticated: false,
+    isLoading: false,
+  }),
+}))
+
 vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual('react-router-dom')
   return {
@@ -40,10 +47,33 @@ describe('AgentInHeader', () => {
     expect(years).toHaveTextContent('1950-2000')
   })
 
-  it('returns agent name', () => {
+  it('returns agent nationality', () => {
     render(<AgentInHeader data={mockAgentData} />)
 
     const nationality = screen.getByTestId('agent-in-header-nationality')
     expect(nationality).toHaveTextContent('American')
+  })
+
+  it('does not render separators when years and nationality are missing', () => {
+    render(
+      <AgentInHeader
+        data={{
+          ...mockAgentData,
+          birthYear: undefined,
+          deathYear: undefined,
+          nationalities: undefined,
+        }}
+      />,
+    )
+
+    expect(screen.getByTestId('agent-in-header-name')).toHaveTextContent(
+      'Mock Person',
+    )
+    expect(
+      screen.queryByTestId('agent-in-header-years'),
+    ).not.toBeInTheDocument()
+    expect(
+      screen.queryByTestId('agent-in-header-nationality'),
+    ).not.toBeInTheDocument()
   })
 })

@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { AuthProvider } from 'react-oidc-context'
 
 import config from './config/config'
+import './i18n'
 import Routes from './features/common/LuxRoutes'
 import GlobalStyle from './styles/global'
 import { useGetEnvQuery } from './redux/api/configApi'
@@ -94,6 +95,28 @@ const App: React.FC = () => {
     }
   }, [initialized])
 
+  // Suppress noisy css-selector-generator warning about shadow roots
+  useEffect(() => {
+    const origWarn = console.warn
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    console.warn = (...args: any[]) => {
+      try {
+        if (
+          typeof args[0] === 'string' &&
+          args[0].includes('CssSelectorGenerator: shadow root inferred')
+        ) {
+          return
+        }
+      } catch {
+        // fall through
+      }
+      origWarn(...args)
+    }
+    return () => {
+      console.warn = origWarn
+    }
+  }, [])
+
   if (envResult.isLoading) {
     return <p>Loading env...</p>
   }
@@ -132,6 +155,25 @@ const App: React.FC = () => {
   }
 
   if (initialized) {
+    // Apply optional NLUX branding from env/server config
+    try {
+      const root = document.documentElement
+      const env = config.env
+      if (env.nluxPrimaryColor) {
+        root.style.setProperty('--nlux-primary', env.nluxPrimaryColor)
+      }
+      if (env.nluxSecondaryColor) {
+        root.style.setProperty('--nlux-secondary', env.nluxSecondaryColor)
+      }
+      if (env.nluxFontColor) {
+        root.style.setProperty('--nlux-font', env.nluxFontColor)
+      }
+      if (env.nluxLogo) {
+        // allow components to use env.nluxLogo
+      }
+    } catch {
+      // ignore
+    }
     return (
       <AuthProvider
         authority={config.env.oidcAuthority}

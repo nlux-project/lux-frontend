@@ -1,4 +1,5 @@
 import { isUndefined } from 'lodash'
+import sanitizeHtml from 'sanitize-html'
 
 import config from '../../../config/config'
 import {
@@ -15,6 +16,7 @@ import {
 import IEntity from '../../../types/data/IEntity'
 import ILinks from '../../../types/data/ILinks'
 import {
+  IAiResearch,
   IContentWithLanguage,
   INoteContent,
 } from '../../../types/IContentWithLanguage'
@@ -22,6 +24,10 @@ import { IImages } from '../../../types/IImages'
 import { recordTypes } from '../../../config/advancedSearch/inputTypes'
 import { iconAats } from '../../../config/icons'
 import IWebpages from '../../../types/data/IWebpages'
+import IConcept from '../../../types/data/IConcept'
+
+const AI_RESEARCH_CONCEPT = '9df7d6d7-88d5-48fd-81f7-8f12dc2d43bb'
+const AI_RESEARCH_LABEL = 'AI Research Analysis'
 
 import {
   forceArray,
@@ -36,6 +42,33 @@ import {
   isEquivalent,
   getEquivalentFromClassifiedAsArray,
 } from './helper'
+
+const stripHtmlFromPlainText = (
+  content: string | undefined,
+): string | undefined =>
+  content !== undefined
+    ? sanitizeHtml(content, {
+        allowedAttributes: {},
+        allowedTags: [],
+      }).trim()
+    : undefined
+
+const getNameClassificationLabels = (
+  classifications: Array<IConcept>,
+): Array<string> =>
+  classifications
+    .filter((classification) => {
+      if (
+        isEquivalent(classification, config.aat.first) ||
+        isEquivalent(classification, config.aat.invertedTerms) ||
+        isEquivalent(classification, config.aat.sortTitle)
+      ) {
+        return false
+      }
+      return true
+    })
+    .map((classification) => classification._label || classification.id)
+    .filter((label): label is string => label !== null && label !== undefined)
 
 // Meant to be base class for other parsers
 export default class EntityParser {
@@ -153,14 +186,11 @@ export default class EntityParser {
 
         // Get the label of the list of names from either the nested classified_as or nested identified_by
         if (classifiedAs.length > 0) {
-          // Filter out inverted terms classifications and sort title classifications
-          const ids = getClassifiedAs(classifiedAs, [
-            config.aat.invertedTerms,
-            config.aat.sortTitle,
-          ])
+          // Filter out display-only name classifications.
+          const labels = getNameClassificationLabels(classifiedAs)
           // check if there are multiple classifications for a name
-          if (ids.length > 0) {
-            ;[label] = ids
+          if (labels.length > 0) {
+            ;[label] = labels
           } else {
             return null
           }
@@ -294,6 +324,31 @@ export default class EntityParser {
     return getSpecificReferredToBy(this.json, config.aat.accessStatement)
   }
 
+  isAiResearchNote(note: IEntity): boolean {
+    const classifiedAs = forceArray(note.classified_as)
+    return classifiedAs.some((classification) => {
+      const id = classification.id || ''
+      return (
+        id.endsWith(`data/concept/${AI_RESEARCH_CONCEPT}`) ||
+        classification._label === AI_RESEARCH_LABEL
+      )
+    })
+  }
+
+  getAiResearch(): IAiResearch | null {
+    const referredToBy = forceArray(this.json.referred_to_by)
+    for (const note of referredToBy) {
+      if (this.isAiResearchNote(note)) {
+        return {
+          content: stripHtmlFromPlainText(note.content) || '',
+          htmlContent: note._content_html,
+          generatedLabel: note.identified_by?.[0]?.content,
+        }
+      }
+    }
+    return null
+  }
+
   /**
    * Returns object with label as the key and array of urls as the value
    * Extract the record id, IIIF manifest, and /equivalent data
@@ -390,10 +445,19 @@ export default class EntityParser {
       }
 
       for (const digital of digitallyShownBy) {
+        if (
+          typeof digital.id === 'string' &&
+          digital.id.match(/^https?:\/\//)
+        ) {
+          imageRep.imageUrls.push(digital.id)
+        }
+
         const accessPoint = forceArray(digital.access_point)
 
         for (const point of accessPoint) {
-          imageRep.imageUrls.push(point.id)
+          if (typeof point.id === 'string' && point.id.match(/^https?:\/\//)) {
+            imageRep.imageUrls.push(point.id)
+          }
         }
 
         const copyrightStatements = new EntityParser(
@@ -401,6 +465,8 @@ export default class EntityParser {
         ).getCopyrightLicensingStatement()
         imageRep.attribution =
           copyrightStatements.length > 0 ? copyrightStatements[0].content : ''
+      }
+      if (imageRep.imageUrls.length > 0) {
         imageReps.push(imageRep)
       }
     }
@@ -424,6 +490,10 @@ export default class EntityParser {
     referredToBy.map((el: IEntity) => {
       let label
       let equivalent
+
+      if (this.isAiResearchNote(el)) {
+        return null
+      }
 
       // check if note is classified as copyright statement or visitors
       // do not parse the entity and return null as they should not be displayed with notes
@@ -467,7 +537,7 @@ export default class EntityParser {
       }
 
       const htmlContent = el._content_html
-      const contentToDisplay = el.content
+      const contentToDisplay = stripHtmlFromPlainText(el.content)
       if (contentToDisplay !== undefined || htmlContent !== undefined) {
         if (data.hasOwnProperty(label)) {
           // If the content has a language and it is english we want to push it to
@@ -562,6 +632,10 @@ export default class EntityParser {
       case 'Period':
         return [eventsIcon, 'Events']
       case 'Event':
+        return [eventsIcon, 'Events']
+      case 'Production':
+        return [eventsIcon, 'Events']
+      case 'Encounter':
         return [eventsIcon, 'Events']
       default:
         return ['', '']

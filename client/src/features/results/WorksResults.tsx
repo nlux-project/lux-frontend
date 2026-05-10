@@ -55,7 +55,9 @@ const WorksResults: React.FC<IProps> = ({ searchResponse, isMobile }) => {
     return null
   }
 
-  const resultsList = (results: Array<IOrderedItems>): Array<JSX.Element> =>
+  const resultsList = (
+    results: Array<IOrderedItems>,
+  ): Array<React.ReactElement> =>
     results.map((result, ind) => (
       <WorksSnippet
         key={result.id}
@@ -98,7 +100,13 @@ const WorksResults: React.FC<IProps> = ({ searchResponse, isMobile }) => {
                 {view === 'list' && resultsList(data.orderedItems)}
                 {view === 'grid' && (
                   <Row xs={1} sm={2} md={3} lg={4} className="g-4 mx-3 pt-2">
-                    {resultsList(data.orderedItems)}
+                    {
+                      resultsList(
+                        data.orderedItems,
+                      ) as unknown as React.ComponentProps<
+                        typeof Row
+                      >['children']
+                    }
                   </Row>
                 )}
                 {estimate >= 20 && (

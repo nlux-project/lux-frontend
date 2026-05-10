@@ -13,8 +13,8 @@ export const searchTypes: Record<string, string> = {
   people: 'Person,Group',
   places: 'Place',
   concepts: 'Currency,Language,Material,MeasurementUnit,Type',
-  events: 'Activity,Period,Event',
-  all: 'HumanMadeObject,DigitalObject,LinguisticObject,VisualItem,Set,Person,Group,Place,Currency,Language,Material,MeasurementUnit,Type,Activity,Period',
+  events: 'Activity,Period,Event,Production,Encounter',
+  all: 'HumanMadeObject,DigitalObject,LinguisticObject,VisualItem,Set,Person,Group,Place,Currency,Language,Material,MeasurementUnit,Type,Activity,Period,Event,Production,Encounter',
 }
 
 /**

@@ -3,6 +3,7 @@ import { Col, Row } from 'react-bootstrap'
 
 import StyledLoadingSpinner from '../../styles/features/common/Spinner'
 import StyledPageLoading from '../../styles/features/common/PageLoading'
+import i18n from '../../i18n'
 
 const PageLoading: React.FC = () => (
   <StyledPageLoading data-testid="page-loading">
@@ -11,7 +12,7 @@ const PageLoading: React.FC = () => (
         <StyledLoadingSpinner animation="border" variant="primary" />
       </Col>
       <Col xs={12} className="d-flex justify-content-center">
-        <h2>Loading data...</h2>
+        <h2>{i18n.t('status.loadingData')}</h2>
       </Col>
     </Row>
   </StyledPageLoading>

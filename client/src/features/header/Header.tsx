@@ -1,15 +1,16 @@
 import React, { useState } from 'react'
+import { useAuth } from 'react-oidc-context'
+import { NavLink } from 'react-router-dom'
 import { Container, Nav, NavDropdown, Navbar } from 'react-bootstrap'
 import styled from 'styled-components'
-import { NavLink } from 'react-router-dom'
-import { useAuth } from 'react-oidc-context'
 
 import config from '../../config/config'
 import { signout, verifyToken } from '../../lib/auth/helper'
+import { pushClientEvent } from '../../lib/pushClientEvent'
 import StyledHeader from '../../styles/features/header/Header'
 import theme from '../../styles/theme'
 import SearchContainer from '../search/SearchContainer'
-import { pushClientEvent } from '../../lib/pushClientEvent'
+import i18n from '../../i18n'
 
 import SearchButton from './SearchButton'
 
@@ -18,7 +19,7 @@ const headerTransitionDuration = '200ms'
 const SeparatingLine = styled.div`
   border-left-width: 1px;
   border-left-style: solid;
-  border-color: white;
+  border-color: var(--nlux-secondary, ${theme.color.black20});
   margin-right: 10px;
   margin-left: 10px;
 `
@@ -30,7 +31,8 @@ const HeaderExpander = styled.div<{ $displaySearch: boolean }>`
   transition-duration: ${headerTransitionDuration};
   transition-timing-function: ease-in-out;
   width: 100%;
-  background-color: ${theme.color.primary.darkBlue};
+  background-color: var(--nlux-primary, ${theme.color.white});
+  border-bottom: 1px solid ${theme.color.black10};
   display: ${(props) => (props.$displaySearch ? 'block' : 'none')};
 
   margin: 0;
@@ -63,6 +65,8 @@ const Header: React.FC<{ hideSearch?: boolean }> = ({ hideSearch }) => {
     pushClientEvent('Internal Link', 'Selected', `Internal ${link}`)
   }
 
+  const env = config.env
+
   if (config.env.featureMyCollections) {
     if (auth.isAuthenticated) {
       // console.log('Authenticated', auth.user)
@@ -80,18 +84,27 @@ const Header: React.FC<{ hideSearch?: boolean }> = ({ hideSearch }) => {
       <Navbar
         collapseOnSelect
         expand="lg"
-        bg="dark"
-        variant="dark"
+        bg="light"
+        variant="light"
         className="w-auto px-4 py-3"
       >
         <Container fluid className="mx-0 navbarContainer">
           <StyledSpan className="d-flex">
             <NavLink
               to="/"
-              className="navbar-brand titleHeading float-right"
+              className="navbar-brand titleHeading float-right d-flex align-items-center"
               onClick={() => handlePushClientEvent('Landing Page')}
             >
-              LUX: Yale Collections Discovery
+              {env.nluxLogo ? (
+                // show configured logo when provided
+                <img
+                  src={env.nluxLogo}
+                  alt={i18n.t('header.title')}
+                  style={{ height: 36 }}
+                />
+              ) : (
+                i18n.t('header.title')
+              )}
             </NavLink>
             <Navbar.Toggle
               aria-controls="responsive-navbar-nav"
@@ -108,28 +121,28 @@ const Header: React.FC<{ hideSearch?: boolean }> = ({ hideSearch }) => {
                 className="nav-link"
                 onClick={() => handlePushClientEvent('About LUX')}
               >
-                About LUX
+                {i18n.t('header.about')}
               </NavLink>
               <NavLink
                 to="/content/open-access"
                 className="nav-link"
                 onClick={() => handlePushClientEvent('Open Access')}
               >
-                Open Access
+                {i18n.t('header.openAccess')}
               </NavLink>
               <NavLink
                 to="/content/simple-search"
                 className="nav-link"
                 onClick={() => handlePushClientEvent('Search Tips')}
               >
-                Search Tips
+                {i18n.t('header.searchTips')}
               </NavLink>
               <NavLink
                 to="/content/faq"
                 className="nav-link"
                 onClick={() => handlePushClientEvent('Help')}
               >
-                Help
+                {i18n.t('header.help')}
               </NavLink>
               {/* {config.env.featureMyCollections && !auth.isAuthenticated && ( */}
               {config.env.featureMyCollections && !isLoggedIn && (
@@ -141,7 +154,7 @@ const Header: React.FC<{ hideSearch?: boolean }> = ({ hideSearch }) => {
                   onClick={() => auth.signinRedirect()}
                   data-testid="login-button"
                 >
-                  Login
+                  {i18n.t('header.login')}
                 </NavLink>
               )}
               {/* {config.env.featureMyCollections && auth.isAuthenticated && ( */}
@@ -153,10 +166,10 @@ const Header: React.FC<{ hideSearch?: boolean }> = ({ hideSearch }) => {
                     className="nav-link"
                     data-testid="my-collections-button"
                   >
-                    My Collections
+                    {i18n.t('header.myCollections')}
                   </NavLink>
                   <NavDropdown
-                    title="username TBD"
+                    title={auth.user?.profile?.name || 'username'}
                     id="user-navbar-dropdown"
                     data-testid="user-navbar-dropdown"
                   >
@@ -165,7 +178,7 @@ const Header: React.FC<{ hideSearch?: boolean }> = ({ hideSearch }) => {
                       href="#"
                       className="navDropdownItem"
                     >
-                      View Profile
+                      {i18n.t('header.viewProfile')}
                     </NavDropdown.Item>
                     <NavDropdown.Item
                       // TODO: revert to the signout function
@@ -173,7 +186,7 @@ const Header: React.FC<{ hideSearch?: boolean }> = ({ hideSearch }) => {
                       onClick={() => signout(auth)}
                       className="navDropdownItem"
                     >
-                      Logout
+                      {i18n.t('header.logout')}
                     </NavDropdown.Item>
                   </NavDropdown>
                 </React.Fragment>
@@ -194,10 +207,10 @@ const Header: React.FC<{ hideSearch?: boolean }> = ({ hideSearch }) => {
       <HeaderExpander $displaySearch={displaySearch}>
         <SearchContainer
           className="headerSearchContainer"
-          bgColor={theme.color.primary.darkBlue}
+          bgColor={theme.color.white}
           id="header-search-container"
           searchTipsStyle={{
-            color: theme.color.white,
+            color: theme.color.black,
             textDecoration: 'underline',
           }}
         />

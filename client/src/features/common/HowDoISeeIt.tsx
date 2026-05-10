@@ -19,6 +19,7 @@ import {
 } from '../../redux/api/ml_api'
 import { getFacetsOrderedItems } from '../../lib/facets/helper'
 import config from '../../config/config'
+import i18n from '../../i18n'
 
 import ExternalLink from './ExternalLink'
 import NotesContainer from './NotesContainer'
@@ -81,7 +82,7 @@ const HowDoISeeIt: React.FC<IProps> = ({ data }) => {
   return (
     <StyledDataRow className="row" data-testid="how-do-i-see-it">
       <Col xs={12}>
-        <h2>How do I see it?</h2>
+        <h2>{i18n.t('sections.howDoISeeIt')}</h2>
       </Col>
       {accessStatement.length > 0 && (
         <StyledDl data-testid="access-statement-dl mb-0">
@@ -121,7 +122,7 @@ const HowDoISeeIt: React.FC<IProps> = ({ data }) => {
         </div>
       ))}
       <dl className="mb-0">
-        {collectionsIsLoading && <p>Loading...</p>}
+        {collectionsIsLoading && <p>{i18n.t('status.loading')}</p>}
         {collectionsIsSuccess && collectionData.length > 0 && (
           <LinkContainer
             label="Collection"

@@ -5,6 +5,7 @@ import { isUndefined } from 'lodash'
 import TextContainer from '../common/TextContainer'
 import TextValue from '../common/TextValue'
 import StyledHr from '../../styles/shared/Hr'
+import { translateLabel } from '../../lib/i18n/translateLabel'
 
 interface IProps {
   label: string
@@ -27,7 +28,7 @@ const ClassContainer: React.FC<IProps> = ({
 }) => (
   <React.Fragment>
     {headerTitle && <StyledHr width="100%" className="classContainerHr" />}
-    {headerTitle && <h3>{headerTitle}</h3>}
+    {headerTitle && <h3>{translateLabel(headerTitle)}</h3>}
     <TextContainer
       label={isUndefined(headerTitle) ? label : undefined}
       textLabelClassName={textLabelClassName}
