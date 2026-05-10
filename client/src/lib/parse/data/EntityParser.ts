@@ -16,6 +16,7 @@ import {
 import IEntity from '../../../types/data/IEntity'
 import ILinks from '../../../types/data/ILinks'
 import {
+  IAiResearch,
   IContentWithLanguage,
   INoteContent,
 } from '../../../types/IContentWithLanguage'
@@ -24,6 +25,9 @@ import { recordTypes } from '../../../config/advancedSearch/inputTypes'
 import { iconAats } from '../../../config/icons'
 import IWebpages from '../../../types/data/IWebpages'
 import IConcept from '../../../types/data/IConcept'
+
+const AI_RESEARCH_CONCEPT = '9df7d6d7-88d5-48fd-81f7-8f12dc2d43bb'
+const AI_RESEARCH_LABEL = 'AI Research Analysis'
 
 import {
   forceArray,
@@ -319,6 +323,31 @@ export default class EntityParser {
     return getSpecificReferredToBy(this.json, config.aat.accessStatement)
   }
 
+  isAiResearchNote(note: IEntity): boolean {
+    const classifiedAs = forceArray(note.classified_as)
+    return classifiedAs.some((classification) => {
+      const id = classification.id || ''
+      return (
+        id.endsWith(`data/concept/${AI_RESEARCH_CONCEPT}`) ||
+        classification._label === AI_RESEARCH_LABEL
+      )
+    })
+  }
+
+  getAiResearch(): IAiResearch | null {
+    const referredToBy = forceArray(this.json.referred_to_by)
+    for (const note of referredToBy) {
+      if (this.isAiResearchNote(note)) {
+        return {
+          content: stripHtmlFromPlainText(note.content) || '',
+          htmlContent: note._content_html,
+          generatedLabel: note.identified_by?.[0]?.content,
+        }
+      }
+    }
+    return null
+  }
+
   /**
    * Returns object with label as the key and array of urls as the value
    * Extract the record id, IIIF manifest, and /equivalent data
@@ -460,6 +489,10 @@ export default class EntityParser {
     referredToBy.map((el: IEntity) => {
       let label
       let equivalent
+
+      if (this.isAiResearchNote(el)) {
+        return null
+      }
 
       // check if note is classified as copyright statement or visitors
       // do not parse the entity and return null as they should not be displayed with notes

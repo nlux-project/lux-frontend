@@ -13,3 +13,9 @@ export interface INoteContent {
 export interface IContentWithLanguage {
   [key: string]: Array<INoteContent>
 }
+
+export interface IAiResearch {
+  content: string
+  htmlContent?: string
+  generatedLabel?: string
+}

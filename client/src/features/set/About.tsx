@@ -14,6 +14,7 @@ import IdentifiersContainer from '../common/IdentifiersContainer'
 import DetailedLinkContainer from '../works/DetailedLinkContainer'
 import { hasData } from '../../lib/parse/data/helper'
 import AboutSubsection from '../works/AboutSubsection'
+import AiResearch from '../common/AiResearch'
 
 interface IObject {
   data: IEntity
@@ -86,6 +87,7 @@ const About: React.FC<IObject> = ({ data }) => {
               id="set-creation"
             />
           )}
+          <AiResearch research={setParser.getAiResearch()} />
           {notes !== null && <NotesContainer notes={notes} showBreakline />}
           {about.length > 0 && (
             <AboutSubsection

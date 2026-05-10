@@ -21,6 +21,62 @@ import {
 import physicalObject, { physicalObject as mockObject } from '../../data/object'
 
 describe('EntityParser', () => {
+  describe('getAiResearch', () => {
+    const aiNote = {
+      type: 'LinguisticObject',
+      content: 'AI summary',
+      _content_html: '<p><strong>AI summary</strong></p>',
+      classified_as: [
+        {
+          id: 'http://localhost:8000/data/concept/9df7d6d7-88d5-48fd-81f7-8f12dc2d43bb',
+          type: 'Type',
+          _label: 'AI Research Analysis',
+        },
+      ],
+      identified_by: [{ type: 'Name', content: 'AI Research Analysis' }],
+    }
+
+    it('returns the separate AI research note', () => {
+      const parser = new EntityParser({
+        id: 'test',
+        type: 'HumanMadeObject',
+        referred_to_by: [aiNote],
+      })
+
+      expect(parser.getAiResearch()).toEqual({
+        content: 'AI summary',
+        htmlContent: '<p><strong>AI summary</strong></p>',
+        generatedLabel: 'AI Research Analysis',
+      })
+    })
+
+    it('filters AI research out of regular notes', () => {
+      const parser = new EntityParser({
+        id: 'test',
+        type: 'HumanMadeObject',
+        referred_to_by: [
+          aiNote,
+          {
+            type: 'LinguisticObject',
+            content: 'Regular note',
+            classified_as: [{ id: 'regular-note', type: 'Type' }],
+          },
+        ],
+      })
+
+      expect(parser.getNotes()).toEqual({
+        'regular-note': [
+          {
+            content: 'Regular note',
+            equivalent: [],
+            language: '',
+            notation: undefined,
+          },
+        ],
+      })
+    })
+  })
+
   describe('getWebPages', () => {
     it('returns array of web pages', () => {
       const parser = new EntityParser(mockEntity)

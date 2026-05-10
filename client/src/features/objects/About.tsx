@@ -14,6 +14,7 @@ import { hasData } from '../../lib/parse/data/helper'
 import SubjectOf from '../common/SubjectOf'
 import { subjectOf } from '../../config/objectsSearchTags'
 import ClassContainer from '../common/ClassContainer'
+import AiResearch from '../common/AiResearch'
 
 import DimensionsContainer from './DimensionsContainer'
 import RelatedEvents from './RelatedEvents'
@@ -120,8 +121,9 @@ const About: React.FC<IObject> = ({ data }) => {
                   id="object-publication"
                 />
               ),
-            )}
+          )}
           <SubjectOf entity={data} halLinkConfig={subjectOf} />
+          <AiResearch research={object.getAiResearch()} />
           {notes !== null && (
             <NotesContainer
               notes={notes}

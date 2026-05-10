@@ -8,6 +8,7 @@ import LinkContainer from '../common/LinkContainer'
 import ClassContainer from '../common/ClassContainer'
 import WebPages from '../common/WebPages'
 import StyledHr from '../../styles/shared/Hr'
+import AiResearch from '../common/AiResearch'
 
 interface IProps {
   entity: IEntity
@@ -75,6 +76,7 @@ const About: React.FC<IProps> = ({ entity }) => {
           </React.Fragment>
         )}
         <WebPages webPages={webPages} />
+        <AiResearch research={concept.getAiResearch()} />
         {notes !== null && (
           <React.Fragment>
             <StyledHr width="100%" className="conceptNotesHr" />
