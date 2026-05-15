@@ -5,7 +5,7 @@ import theme from '../../theme'
 const Header = styled.div`
   width: 100%;
   .navbar {
-    background-color: var(--nlux-primary, ${theme.color.white}) !important;
+    background-color: ${theme.color.white} !important;
     border-bottom: 1px solid ${theme.color.black10};
     padding: 1.25 auto;
 
@@ -25,7 +25,7 @@ const Header = styled.div`
   .navbar-brand {
     font-family: YaleDesign, serif;
     font-weight: 400;
-    color: var(--nlux-font, ${theme.color.black});
+    color: ${theme.color.black};
     white-space: pre-wrap;
     order: 2;
 
@@ -35,7 +35,7 @@ const Header = styled.div`
   }
 
   #nav-links a {
-    color: var(--nlux-font, ${theme.color.black});
+    color: ${theme.color.black};
     font-weight: ${theme.font.weight.medium};
 
     &.navDropdownItem {
@@ -50,7 +50,7 @@ const Header = styled.div`
 
   .navbar-light .navbar-toggler,
   .navbar-dark .navbar-toggler {
-    color: var(--nlux-font, ${theme.color.black});
+    color: ${theme.color.black};
     border: none;
     font-weight: ${theme.font.weight.medium};
     order: 1;

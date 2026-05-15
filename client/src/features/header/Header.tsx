@@ -19,7 +19,7 @@ const headerTransitionDuration = '200ms'
 const SeparatingLine = styled.div`
   border-left-width: 1px;
   border-left-style: solid;
-  border-color: var(--nlux-secondary, ${theme.color.black20});
+  border-color: ${theme.color.black20};
   margin-right: 10px;
   margin-left: 10px;
 `
@@ -31,7 +31,7 @@ const HeaderExpander = styled.div<{ $displaySearch: boolean }>`
   transition-duration: ${headerTransitionDuration};
   transition-timing-function: ease-in-out;
   width: 100%;
-  background-color: var(--nlux-primary, ${theme.color.white});
+  background-color: ${theme.color.white};
   border-bottom: 1px solid ${theme.color.black10};
   display: ${(props) => (props.$displaySearch ? 'block' : 'none')};
 
