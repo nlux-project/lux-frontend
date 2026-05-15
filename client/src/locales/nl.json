@@ -16,6 +16,23 @@
     "accessibility": "Toegankelijkheid",
     "privacy": "Privacy"
   },
+  "facets": {
+    "Collection": "Collectie",
+    "Created At": "Plaats",
+    "Created By": "Vervaardiger",
+    "Creation Data": "Datum",
+    "Creation Date": "Datum",
+    "Has Digital Image": "Heeft Afbeelding",
+    "Is Online": "Is Online",
+    "Materials": "Materiaal",
+    "Object Class": "Objectklasse",
+    "Responsable Unit": "Organisatie",
+    "Responsible Unit": "Organisatie",
+    "Technique": "Techniek"
+  },
+  "landing": {
+    "title": "Ontdek NLUX Collecties"
+  },
   "status": {
     "loading": "Laden...",
     "loadingData": "Gegevens laden...",

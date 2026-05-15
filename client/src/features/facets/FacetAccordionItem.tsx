@@ -15,6 +15,7 @@ import { getEstimates } from '../../lib/parse/search/searchResultParser'
 import StyledHr from '../../styles/shared/Hr'
 import theme from '../../styles/theme'
 import useResizeableWindow from '../../lib/hooks/useResizeableWindow'
+import i18n from '../../i18n'
 
 import Checklist from './Checklist'
 import FullDateInput from './FullDateInput'
@@ -126,6 +127,11 @@ const FacetAccordionItem: React.FC<IProps> = ({
       orderedItems.length > 0 &&
       Object.keys(facets.requests).length > 0
     ) {
+      const facetLabel = facetLabels[facetName]
+      const translatedFacetLabel = i18n.t(`facets.${facetLabel}`, {
+        defaultValue: facetLabel,
+      })
+
       return (
         <div key={`${tab}-${facetName}`} className="accordion-item">
           <p className="accordion-header" id={`heading-${index}`}>
@@ -136,7 +142,7 @@ const FacetAccordionItem: React.FC<IProps> = ({
                 pushClientEvent(
                   'Facets Accordion Item',
                   action,
-                  `Facet ${facetLabels[facetName]}`,
+                  `Facet ${facetLabel}`,
                 )
               }}
               className={`accordion-button ${isFacetOpen ? '' : 'collapsed'}`}
@@ -147,7 +153,7 @@ const FacetAccordionItem: React.FC<IProps> = ({
               aria-expanded={isFacetOpen}
               aria-controls={`#collapse-${index}`}
             >
-              {facetLabels[facetName]}
+              {translatedFacetLabel}
             </button>
           </p>
           <div

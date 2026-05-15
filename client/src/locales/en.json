@@ -16,6 +16,23 @@
     "accessibility": "Accessibility",
     "privacy": "Privacy"
   },
+  "facets": {
+    "Collection": "Collection",
+    "Created At": "Created At",
+    "Created By": "Created By",
+    "Creation Data": "Creation Data",
+    "Creation Date": "Creation Date",
+    "Has Digital Image": "Has Digital Image",
+    "Is Online": "Is Online",
+    "Materials": "Materials",
+    "Object Class": "Object Class",
+    "Responsable Unit": "Responsable Unit",
+    "Responsible Unit": "Responsible Unit",
+    "Technique": "Technique"
+  },
+  "landing": {
+    "title": "Explore Yale Collections"
+  },
   "status": {
     "loading": "Loading...",
     "loadingData": "Loading data...",
