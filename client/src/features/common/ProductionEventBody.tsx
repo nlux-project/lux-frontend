@@ -153,7 +153,7 @@ const ProductionEventBody: React.FC<IProps> = ({
       {dates.length > 0 && (
         <Row>
           <div className={keyClassName}>
-            <dt>When</dt>
+            <dt>{i18n.t('labels.When')}</dt>
           </div>
           <div className={valueClassName}>
             <dd data-testid={`${id}-event-dates`}>{dates[0]}</dd>

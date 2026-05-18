@@ -198,29 +198,6 @@ export const getContentByClassifiedAs = (
 }
 
 /**
- * Returns the content value of the nested /identified_by within a /timespan object
- * @param {ITimeSpan | undefined} timespan the object from the /timespan property
- * @returns {Array<string>}
- */
-export const getDateContent = (
-  timespan: ITimeSpan | undefined,
-): Array<string> => {
-  if (timespan === undefined) {
-    return []
-  }
-
-  const identifiedBy = forceArray(timespan.identified_by)
-
-  if (identifiedBy.length === 0 && !isUndefined(timespan.begin_of_the_begin)) {
-    return [timespan.begin_of_the_begin]
-  }
-
-  return identifiedBy
-    .map((id) => id.content)
-    .filter((cont) => cont !== undefined)
-}
-
-/**
  * Returns the year plus one to adjust for incorrect BCE years
  * @param {number} year the object from the /timespan property
  * @returns {string}
@@ -287,7 +264,7 @@ export const isPlaceholderYear = (year: number): boolean =>
  * @param {string | undefined} date the UTC date in ISOString format
  * @returns {string}
  */
-export const transformDate = (date: string): string => {
+export function transformDate(date: string): string {
   if (date === '') {
     return ''
   }
@@ -318,6 +295,41 @@ export const transformDate = (date: string): string => {
   }
 
   return returnDate.trim()
+}
+
+const transformTimespanFallbackDate = (date: string): string => {
+  const yearOnlyDate = date.match(/^(-?\d+)-01-01T00:00:00(?:\.\d+)?Z?$/)
+  if (yearOnlyDate) {
+    return `${Number(yearOnlyDate[1])}`
+  }
+
+  return transformDate(date)
+}
+
+/**
+ * Returns the content value of the nested /identified_by within a /timespan object
+ * @param {ITimeSpan | undefined} timespan the object from the /timespan property
+ * @returns {Array<string>}
+ */
+export const getDateContent = (
+  timespan: ITimeSpan | undefined,
+): Array<string> => {
+  if (timespan === undefined) {
+    return []
+  }
+
+  const identifiedBy = forceArray(timespan.identified_by)
+
+  if (identifiedBy.length === 0 && !isUndefined(timespan.begin_of_the_begin)) {
+    return [
+      transformTimespanFallbackDate(timespan.begin_of_the_begin) ||
+        timespan.begin_of_the_begin,
+    ]
+  }
+
+  return identifiedBy
+    .map((id) => id.content)
+    .filter((cont) => cont !== undefined)
 }
 
 /**

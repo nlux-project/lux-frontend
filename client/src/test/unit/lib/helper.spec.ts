@@ -227,6 +227,17 @@ describe('helper functions', () => {
       const arr = getDateContent(undefined)
       expect(arr).toEqual([])
     })
+
+    it('formats the begin date when there is no display date content', () => {
+      const entity: ITimeSpan = {
+        type: 'TimeSpan',
+        begin_of_the_begin: '1744-01-01T00:00:00',
+      }
+
+      const arr = getDateContent(entity)
+
+      expect(arr).toEqual(['1744'])
+    })
   })
 
   describe('getBeginOfTheBegin', () => {
