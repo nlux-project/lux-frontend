@@ -26,7 +26,7 @@ const StyledSpan = styled.span`
  * @returns {JSX.Element}
  */
 const AgentInHeader: React.FC<IAgents> = ({ data }) => {
-  const { name, birthYear, deathYear, nationalities } = data
+  const { name, nationalities } = data
   const auth = useAuth()
   const loc = useLocation()
   const nationalityStr = forceArray(nationalities)[0] || ''
@@ -35,18 +35,12 @@ const AgentInHeader: React.FC<IAgents> = ({ data }) => {
     pageUri: loc.pathname,
     auth,
   })
-  const hasLifeYears = Boolean(birthYear || deathYear)
   const hasNationality = nationalityIsReady && Boolean(nationality)
 
   return (
     <React.Fragment>
       {name !== undefined && name !== '' && (
         <StyledSpan data-testid="agent-in-header-name">{name}</StyledSpan>
-      )}
-      {hasLifeYears && (
-        <StyledSpan data-testid="agent-in-header-years">
-          , {birthYear || ''}-{deathYear || ''}
-        </StyledSpan>
       )}
       {hasNationality && (
         <StyledSpan data-testid="agent-in-header-nationality">

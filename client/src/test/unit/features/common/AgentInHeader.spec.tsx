@@ -40,11 +40,12 @@ describe('AgentInHeader', () => {
     expect(name).toHaveTextContent('Mock Person')
   })
 
-  it('returns agent birth and death years', () => {
+  it('does not return agent birth and death years', () => {
     render(<AgentInHeader data={mockAgentData} />)
 
-    const years = screen.getByTestId('agent-in-header-years')
-    expect(years).toHaveTextContent('1950-2000')
+    expect(
+      screen.queryByTestId('agent-in-header-years'),
+    ).not.toBeInTheDocument()
   })
 
   it('returns agent nationality', () => {
